@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="ru" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Aevome AI — ИИ-навигатор по международному образованию и грантам</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts: Plus Jakarta Sans & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Supabase JS Client v2 -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <!-- Подключение кастомных стилей -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Подключение исполняемого JS-скрипта -->
+    <script src="script.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    screens: {
+                        'xs': '375px',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Plus Jakarta Sans', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f5f3ff',
+                            100: '#ede9fe',
+                            500: '#8b5cf6',
+                            600: '#7c3aed',
+                            700: '#6d28d9',
+                        },
+                        accent: {
+                            blue: '#3b82f6',
+                            emerald: '#10b981',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-[#FCFCFD] text-slate-800 font-sans min-h-screen relative overflow-x-hidden">
+
+    <!-- Фоновый слой (абсолютно изолирован во избежание горизонтального скролла на мобильных устройствах) -->
+    <div class="absolute inset-0 overflow-hidden pointer-events-none z-0">
+        <div class="absolute inset-0 bg-grid-pattern"></div>
+        <div class="absolute top-0 left-1/4 w-[300px] sm:w-[800px] h-[300px] sm:h-[800px] gradient-glow-1"></div>
+        <div class="absolute top-[800px] right-1/4 w-[250px] sm:w-[600px] h-[250px] sm:h-[600px] gradient-glow-2"></div>
+    </div>
+
+    <!-- Шапка сайта (Header) -->
+    <header class="sticky top-0 z-50 backdrop-blur-md bg-[#FCFCFD]/85 border-b border-slate-100/80">
+        <div class="max-w-7xl mx-auto px-4 xs:px-5 sm:px-6 lg:px-8 h-14 md:h-16 flex items-center justify-between">
+            <div class="flex items-center gap-8">
+                <a href="#" class="flex items-center gap-2">
+                    <span class="font-display font-extrabold text-xl sm:text-2xl tracking-tight text-slate-900 flex items-center">
+                        aevome<span class="inline-block w-2.5 h-2.5 bg-brand-500 rounded-full ml-1 animate-pulse-slow"></span>
+                    </span>
+                </a>
+                <nav class="hidden md:flex items-center gap-6 text-sm font-medium text-slate-600">
+                    <a href="#how-it-works" class="hover:text-brand-600 transition-colors">Как это работает</a>
+                    <a href="#features" class="hover:text-brand-600 transition-colors">Преимущества</a>
+                    <a href="#scanner" class="hover:text-brand-600 transition-colors">ИИ-Сканер</a>
+                    <a href="glossary.html" class="hover:text-brand-600 transition-colors">🧭 Гид по поступлению & Словарь</a>
+                </nav>
+            </div>
+
+            <div class="flex items-center gap-2 sm:gap-4">
+                <a href="https://t.me/aevome_channel" target="_blank" class="hidden sm:inline-flex items-center gap-1.5 text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors">
+                    <i data-lucide="send" class="w-4 h-4 text-[#229ED9]"></i> Канал
+                </a>
+                <a href="https://t.me/aevome_bot" target="_blank" class="hidden sm:inline-flex items-center gap-2 bg-slate-900 hover:bg-slate-800 text-white px-4 py-2 rounded-xl text-sm font-semibold shadow-sm hover:shadow-md hover:scale-[1.02] transform transition-all duration-200">
+                    <span>🚀 Запустить бота</span>
+                    <i data-lucide="arrow-up-right" class="w-4 h-4"></i>
+                </a>
+
+                <!-- Бургер кнопка для мобильных -->
+                <button type="button" onclick="toggleMobileMenu(); document.documentElement.classList.toggle('menu-open'); document.body.classList.toggle('menu-open');" class="inline-flex md:hidden p-3 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 transition-colors active:scale-95 shrink-0">
+                    <i data-lucide="menu" class="w-5 h-5"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Выдвижное мобильное меню -->
+    <div id="mobile-menu" class="hidden fixed inset-0 z-50 bg-[#FCFCFD]/95 backdrop-blur-xl flex flex-col p-5 xs:p-6 animate-fade-in-up h-[100dvh] overflow-y-auto">
+        <div class="flex items-center justify-between pb-6 border-b border-slate-100">
+            <span class="font-display font-extrabold text-2xl tracking-tight text-slate-900">
+                aevome<span class="inline-block w-2.5 h-2.5 bg-brand-500 rounded-full ml-1"></span>
+            </span>
+            <button type="button" onclick="toggleMobileMenu(); document.documentElement.classList.remove('menu-open'); document.body.classList.remove('menu-open');" class="p-3 rounded-xl border border-slate-200 bg-white text-slate-700 active:scale-95 shrink-0">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+        </div>
+        <nav class="flex flex-col gap-6 py-8 text-lg font-semibold text-slate-800">
+            <a href="#how-it-works" onclick="toggleMobileMenu(); document.documentElement.classList.remove('menu-open'); document.body.classList.remove('menu-open');" class="hover:text-brand-600 transition-colors">Как это работает</a>
+            <a href="#features" onclick="toggleMobileMenu(); document.documentElement.classList.remove('menu-open'); document.body.classList.remove('menu-open');" class="hover:text-brand-600 transition-colors">Преимущества</a>
+            <a href="#scanner" onclick="toggleMobileMenu(); document.documentElement.classList.remove('menu-open'); document.body.classList.remove('menu-open');" class="hover:text-brand-600 transition-colors">ИИ-Сканер</a>
+            <a href="glossary.html" onclick="toggleMobileMenu(); document.documentElement.classList.remove('menu-open'); document.body.classList.remove('menu-open');" class="hover:text-brand-600 transition-colors">🧭 Гид по поступлению & Словарь</a>
+        </nav>
+        <div class="mt-auto space-y-3.5 pb-4">
+            <a href="https://t.me/aevome_channel" target="_blank" class="w-full inline-flex items-center justify-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-700 py-3 rounded-xl font-bold text-sm transition-all active:scale-98">
+                <i data-lucide="send" class="w-4.5 h-4.5 text-[#229ED9]"></i>
+                <span>Подписаться на канал</span>
+            </a>
+            <a href="https://t.me/aevome_bot" target="_blank" class="w-full inline-flex items-center justify-center gap-2 bg-brand-600 hover:bg-brand-700 text-white py-3.5 rounded-xl font-bold text-sm transition-all shadow-lg shadow-brand-500/10 active:scale-98">
+                <span>🚀 Запустить бота в Telegram</span>
+            </a>
+        </div>
+    </div>
+
+    <main class="relative z-10 max-w-7xl mx-auto px-4 xs:px-5 sm:px-6 lg:px-8">
+
+        <!-- Hero-секция -->
+        <section class="pt-8 pb-10 sm:pt-16 sm:pb-16 md:pt-32 md:pb-24 text-center">
+            <div class="inline-flex items-center gap-2 bg-brand-50 border border-brand-100 rounded-full px-4 py-1.5 mb-5 md:mb-6 animate-fade-in-up">
+                <span class="flex h-1.5 w-1.5 rounded-full bg-brand-500 animate-pulse"></span>
+                <span class="text-[10px] sm:text-xs font-semibold text-brand-700 uppercase tracking-wider font-display">Умная оценка потенциала абитуриента</span>
+            </div>
+
+            <h1 class="font-display font-extrabold text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl tracking-tight text-slate-900 max-w-4xl mx-auto leading-tight sm:leading-tight md:leading-[1.15] mb-4 sm:mb-6 animate-fade-in-up" style="animation-delay: 100ms;">
+                Твой персональный ИИ-навигатор в мир <span class="bg-clip-text text-transparent bg-gradient-to-r from-brand-500 via-violet-600 to-accent-blue">зарубежного образования</span> и грантов
+            </h1>
+
+            <p class="text-sm sm:text-base md:text-lg lg:text-xl text-slate-600 max-w-2xl mx-auto leading-relaxed mb-6 sm:mb-8 md:mb-10 animate-fade-in-up" style="animation-delay: 200ms;">
+                Aevome AI мгновенно оценит шансы поступления, подберет подходящие университеты и проложит путь к финансированию вашего образования.
+            </p>
+
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 max-w-xl mx-auto animate-fade-in-up" style="animation-delay: 300ms;">
+                <a href="#scanner" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-brand-600 hover:bg-brand-700 text-white px-6 sm:px-8 py-3.5 sm:py-4 rounded-xl sm:rounded-2xl font-bold text-sm sm:text-base shadow-lg shadow-brand-500/15 hover:shadow-brand-500/25 active:scale-95 transition-all duration-300 min-h-[44px]">
+                    <span>Пройти сканирование</span>
+                    <i data-lucide="sparkles" class="w-4.5 h-4.5"></i>
+                </a>
+                <a href="glossary.html" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-white hover:bg-slate-50 text-slate-800 border border-slate-200 hover:border-slate-300 px-6 sm:px-8 py-3.5 sm:py-4 rounded-xl sm:rounded-2xl font-bold text-sm sm:text-base shadow-sm hover:shadow-md active:scale-95 transition-all duration-300 min-h-[44px]">
+                    <span>🧭 Гид по поступлению & Словарь</span>
+                    <i data-lucide="book-open" class="w-4.5 h-4.5 text-brand-500"></i>
+                </a>
+            </div>
+        </section>
+
+        <!-- Bento Grid Преимущества -->
+        <section id="features" class="py-10 md:py-16 border-t border-slate-100">
+            <div class="text-center mb-8 md:mb-12">
+                <h2 class="font-display font-bold text-xl sm:text-2xl md:text-3xl text-slate-900 mb-2 md:mb-3">Технологии на вашей стороне</h2>
+                <p class="text-slate-500 text-xs sm:text-sm">Как работают алгоритмы скоринга Aevome AI</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+                <!-- Карточка 1 -->
+                <div class="premium-card bg-white border border-slate-100 rounded-2xl md:rounded-3xl p-5 md:p-8 shadow-sm flex flex-col justify-between group transition-all">
+                    <div>
+                        <div class="w-10 h-10 md:w-12 md:h-12 bg-brand-50 rounded-xl md:rounded-2xl flex items-center justify-center mb-4 md:mb-6 text-brand-500 group-hover:scale-110 transition-transform">
+                            <i data-lucide="activity" class="w-5 h-5 md:w-6 md:h-6"></i>
+                        </div>
+                        <h3 class="font-display font-bold text-lg md:text-xl text-slate-900 mb-1.5 md:mb-2">Скоринг профиля</h3>
+                        <p class="text-slate-500 text-xs md:text-sm leading-relaxed">Система проводит моментальный анализ успеваемости, определяя сильные стороны вашего портфолио.</p>
+                    </div>
+                </div>
+
+                <!-- Карточка 2 -->
+                <div class="premium-card bg-white border border-slate-100 rounded-2xl md:rounded-3xl p-5 md:p-8 shadow-sm flex flex-col justify-between group transition-all md:col-span-2">
+                    <div>
+                        <div class="w-10 h-10 md:w-12 md:h-12 bg-blue-50 rounded-xl md:rounded-2xl flex items-center justify-center mb-4 md:mb-6 text-accent-blue group-hover:scale-110 transition-transform">
+                            <i data-lucide="alert-triangle" class="w-5 h-5 md:w-6 md:h-6"></i>
+                        </div>
+                        <h3 class="font-display font-bold text-lg md:text-xl text-slate-900 mb-1.5 md:mb-2">Анализ слабых мест</h3>
+                        <p class="text-slate-500 text-xs md:text-sm leading-relaxed">Мы не просто хвалим вас. Алгоритм выявит риски, дедлайны и критические пробелы в вашей внеучебной и языковой подготовке.</p>
+                    </div>
+                </div>
+
+                <!-- Карточка 3 -->
+                <div class="premium-card bg-white border border-slate-100 rounded-2xl md:rounded-3xl p-5 md:p-8 shadow-sm flex flex-col justify-between group transition-all">
+                    <div>
+                        <div class="w-10 h-10 md:w-12 md:h-12 bg-emerald-50 rounded-xl md:rounded-2xl flex items-center justify-center mb-4 md:mb-6 text-accent-emerald group-hover:scale-110 transition-transform">
+                            <i data-lucide="award" class="w-5 h-5 md:w-6 md:h-6"></i>
+                        </div>
+                        <h3 class="font-display font-bold text-lg md:text-xl text-slate-900 mb-1.5 md:mb-2">Поиск скрытых грантов</h3>
+                        <p class="text-slate-500 text-xs md:text-sm leading-relaxed">Система находит неочевидные стипендии и формы финансирования под конкретную специфику вашего бэкграунда.</p>
+                    </div>
+                </div>
+
+                <!-- Карточка 4 -->
+                <div class="premium-card bg-white border border-slate-100 rounded-2xl md:rounded-3xl p-5 md:p-8 shadow-sm flex flex-col justify-between group transition-all md:col-span-2">
+                    <div>
+                        <div class="w-10 h-10 md:w-12 md:h-12 bg-indigo-50 rounded-xl md:rounded-2xl flex items-center justify-center mb-4 md:mb-6 text-indigo-500 group-hover:scale-110 transition-transform">
+                            <i data-lucide="bot" class="w-5 h-5 md:w-6 md:h-6"></i>
+                        </div>
+                        <h3 class="font-display font-bold text-lg md:text-xl text-slate-900 mb-1.5 md:mb-2">ИИ-Ментор 24/7</h3>
+                        <p class="text-slate-500 text-xs md:text-sm leading-relaxed">Глубокая интеграция с Telegram позволяет сопровождать вас на каждом этапе исправления слабых сторон портфолио.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Как это работает (How it works) -->
+        <section id="how-it-works" class="py-10 md:py-16 border-t border-slate-100">
+            <div class="text-center mb-10 md:mb-16">
+                <h2 class="font-display font-bold text-xl sm:text-2xl md:text-3xl text-slate-900 mb-2 md:mb-3">Как проходит анализ</h2>
+                <p class="text-slate-500 text-xs sm:text-sm">Полный цикл за 2 минуты</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+                <div class="relative flex flex-col items-center text-center">
+                    <div class="w-12 h-12 md:w-16 md:h-16 bg-white border border-slate-200 rounded-xl md:rounded-2xl shadow-sm text-brand-600 font-display font-extrabold text-lg md:text-2xl flex items-center justify-center mb-4 md:mb-6 transition-transform hover:scale-105 duration-200">1</div>
+                    <h3 class="font-display font-bold text-base md:text-lg text-slate-900 mb-1.5 md:mb-2">Заполнение анкеты</h3>
+                    <p class="text-slate-500 text-xs md:text-sm max-w-xs">Вы делитесь академической успеваемостью и достижениями в нашем интерактивном сканере.</p>
+                </div>
+                <div class="relative flex flex-col items-center text-center">
+                    <div class="w-12 h-12 md:w-16 md:h-16 bg-white border border-slate-200 rounded-xl md:rounded-2xl shadow-sm text-brand-600 font-display font-extrabold text-lg md:text-2xl flex items-center justify-center mb-4 md:mb-6 transition-transform hover:scale-105 duration-200">2</div>
+                    <h3 class="font-display font-bold text-base md:text-lg text-slate-900 mb-1.5 md:mb-2">Генерация отчета</h3>
+                    <p class="text-slate-500 text-xs md:text-sm max-w-xs">Модель aevome ai рассчитывает шансы на поступление и выстраивает пошаговую Roadmap.</p>
+                </div>
+                <div class="relative flex flex-col items-center text-center">
+                    <div class="w-12 h-12 md:w-16 md:h-16 bg-white border border-slate-200 rounded-xl md:rounded-2xl shadow-sm text-brand-600 font-display font-extrabold text-lg md:text-2xl flex items-center justify-center mb-4 md:mb-6 transition-transform hover:scale-105 duration-200">3</div>
+                    <h3 class="font-display font-bold text-base md:text-lg text-slate-900 mb-1.5 md:mb-2">Сохранение профиля</h3>
+                    <p class="text-slate-500 text-xs md:text-sm max-w-xs">Выгрузка подробного досье в Telegram-бот для бесшовного общения с персональным ИИ-консультантом.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ГЛАВНЫЙ ВИДЖЕТ (Пошаговый опросник) -->
+        <section id="scanner" class="py-10 md:py-16 border-t border-slate-100 scroll-mt-14 md:scroll-mt-20">
+            <div class="max-w-3xl mx-auto">
+                <div class="text-center mb-6 md:mb-10">
+                    <h2 class="font-display font-bold text-xl sm:text-2xl md:text-3xl text-slate-900 mb-2 md:mb-3">Сканирование профиля</h2>
+                    <p class="text-slate-500 text-xs sm:text-sm">Заполните данные для составления индивидуальной дорожной карты</p>
+                </div>
+
+                <div class="bg-white border border-slate-200/80 rounded-2xl md:rounded-3xl p-4 sm:p-6 md:p-10 shadow-[0_12px_40px_rgba(0,0,0,0.03)] relative overflow-hidden">
+
+                    <!-- Блок предупреждения об ошибках ИИ -->
+                    <div id="ai-warning-msg" class="hidden mb-6 p-3.5 md:p-4 rounded-xl md:rounded-2xl border border-amber-200 bg-amber-50 text-amber-800 text-xs md:text-sm flex items-center gap-3 shadow-sm animate-fade-in-up">
+                        <i data-lucide="alert-circle" class="w-5 h-5 text-amber-600 shrink-0"></i>
+                        <span id="ai-warning-text">⏳ Система Aevome AI перегружена запросами. Пожалуйста, подождите 3-5 секунд и повторите попытку.</span>
+                    </div>
+
+                    <!-- Шаг Прогресса -->
+                    <div class="mb-6 md:mb-10">
+                        <div class="flex items-center justify-between text-[10px] md:text-xs font-semibold uppercase tracking-wider text-slate-400 mb-3 md:mb-4">
+                            <span>Шаг <span id="progress-step-num">1</span> из 6</span>
+                            <span id="progress-step-title">Текущий статус</span>
+                        </div>
+                        <div class="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden shadow-inner">
+                            <div id="progress-bar" class="h-full bg-gradient-to-r from-brand-500 to-indigo-500 transition-all duration-500 shadow-[0_0_8px_rgba(139,92,246,0.5)]" style="width: 16.6%;"></div>
+                        </div>
+                    </div>
+
+                    <form id="scanner-form" onsubmit="return false;">
+
+                        <!-- ШАГ 1: Выбор класса -->
+                        <div id="form-step-1" class="step-container space-y-4 md:space-y-6">
+                            <h3 class="text-base md:text-lg font-bold text-slate-900 mb-4">Какой ваш текущий академический статус?</h3>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
+                                <label class="form-option-card border border-slate-200 rounded-xl md:rounded-2xl p-3.5 md:p-4 flex items-center gap-3 cursor-pointer bg-white transition-all min-h-[44px]">
+                                    <input type="radio" name="class_status" value="9 класс" class="w-4.5 h-4.5 text-brand-600 focus:ring-brand-500 shrink-0" checked>
+                                    <div class="flex flex-col">
+                                        <span class="font-semibold text-slate-900 text-sm">9 класс</span>
+                                        <span class="text-[10px] md:text-xs text-slate-400">Начало формирования профиля</span>
+                                    </div>
+                                </label>
+                                <label class="form-option-card border border-slate-200 rounded-xl md:rounded-2xl p-3.5 md:p-4 flex items-center gap-3 cursor-pointer bg-white transition-all min-h-[44px]">
+                                    <input type="radio" name="class_status" value="10 класс" class="w-4.5 h-4.5 text-brand-600 focus:ring-brand-500 shrink-0">
+                                    <div class="flex flex-col">
+                                        <span class="font-semibold text-slate-900 text-sm">10 класс</span>
+                                        <span class="text-[10px] md:text-xs text-slate-400">Активная сборка портфолио</span>
+                                    </div>
+                                </label>
+                                <label class="form-option-card border border-slate-200 rounded-xl md:rounded-2xl p-3.5 md:p-4 flex items-center gap-3 cursor-pointer bg-white transition-all min-h-[44px]">
+                                    <input type="radio" name="class_status" value="11 класс" class="w-4.5 h-4.5 text-brand-600 focus:ring-brand-500 shrink-0">
+                                    <div class="flex flex-col">
+                                        <span class="font-semibold text-slate-900 text-sm">11 класс</span>
+                                        <span class="text-[10px] md:text-xs text-slate-400">Подача и финальные дедлайны</span>
+                                    </div>
+                                </label>
+                                <label class="form-option-card border border-slate-200 rounded-xl md:rounded-2xl p-3.5 md:p-4 flex items-center gap-3 cursor-pointer bg-white transition-all min-h-[44px]">
+                                    <input type="radio" name="class_status" value="Выпускник" class="w-4.5 h-4.5 text-brand-600 focus:ring-brand-500 shrink-0">
+                                    <div class="flex flex-col">
+                                        <span class="font-semibold text-slate-900 text-sm">Выпускник</span>
+                                        <span class="text-[10px] md:text-xs text-slate-400">Поступление после школы/вуза</span>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- ШАГ 2: Ввод GPA -->
+                        <div id="form-step-2" class="step-container hidden space-y-4 md:space-y-6">
+                            <h3 class="text-base md:text-lg font-bold text-slate-900 mb-1.5">Укажите ваш средний балл (GPA)</h3>
+                            <p class="text-[11px] md:text-xs text-slate-400 leading-relaxed mb-4">Средний балл по пятибалльной шкале успеваемости. Например: 4.8</p>
+                            <div class="relative w-full max-w-md group">
+                                <input type="number" id="gpa" name="gpa" step="0.1" min="1.0" max="5.0" placeholder="4.7" inputmode="decimal"
+                                    class="w-full border border-slate-200 rounded-xl md:rounded-2xl p-3.5 md:p-4 pr-12 focus:outline-none focus:ring-2 focus:ring-brand-500/50 focus:border-brand-500 font-semibold text-base md:text-lg text-slate-900 transition-all min-h-[44px]">
+                                <div class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 font-bold text-sm transition-colors group-focus-within:text-brand-500">/ 5.0</div>
+                            </div>
+                            <span id="gpa-error" class="text-[11px] md:text-xs text-red-500 hidden block">Пожалуйста, введите корректный GPA от 1.0 до 5.0</span>
+                        </div>
+
+                        <!-- ШАГ 3: Выбор языковых тестов -->
+                        <div id="form-step-3" class="step-container hidden space-y-4 md:space-y-6">
+                            <h3 class="text-base md:text-lg font-bold text-slate-900 mb-1.5">Языковые и академические экзамены</h3>
+                            <p class="text-[11px] md:text-xs text-slate-400 leading-relaxed mb-4">Выберите сданные вами тесты или те, к которым вы сейчас готовитесь. Вы можете выбрать несколько.</p>
+
+                            <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5 md:gap-3 mb-6">
+                                <label class="form-option-card border border-slate-200 rounded-xl md:rounded-2xl p-3 md:p-4 flex items-center gap-2.5 cursor-pointer bg-white transition-all select-none min-h-[44px]">
+                                    <input type="checkbox" id="lang-IELTS" value="IELTS" class="w-4.5 h-4.5 text-brand-600 focus:ring-brand-500 rounded shrink-0">
+                                    <span class="font-semibold text-slate-800 text-xs md:text-sm">IELTS</span>
+                                </label>
+                                <label class="form-option-card border border-slate-200 rounded-xl md:rounded-2xl p-3 md:p-4 flex items-center gap-2.5 cursor-pointer bg-white transition-all select-none min-h-[44px]">
+                                    <input type="checkbox" id="lang-TOEFL" value="TOEFL" class="w-4.5 h-4.5 text-brand-600 focus:ring-brand-500 rounded shrink-0">
+                                    <span class="font-semibold text-slate-800 text-xs md:text-sm">TOEFL</span>
+                                </label>
+                                <label class="form-option-card border border-slate-200 rounded-xl md:rounded-2xl p-3 md:p-4 flex items-center gap-2.5 cursor-pointer bg-white transition-all select-none min-h-[44px]">
+                                    <input type="checkbox" id="lang-HSK" value="HSK" class="w-4.5 h-4.5 text-brand-600 focus:ring-brand-500 rounded shrink-0">
+                                    <span class="font-semibold text-slate-800 text-xs md:text-sm">HSK</span>
+                                </label>
+                                <label class="form-option-card border border-slate-200 rounded-xl md:rounded-2xl p-3 md:p-4 flex items-center gap-2.5 cursor-pointer bg-white transition-all select-none min-h-[44px]">
+                                    <input type="checkbox" id="lang-SAT" value="SAT" class="w-4.5 h-4.5 text-brand-600 focus:ring-brand-500 rounded shrink-0">
+                                    <span class="font-semibold text-slate-800 text-xs md:text-sm">SAT</span>
+                                </label>
+                                <label class="form-option-card border border-slate-200 rounded-xl md:rounded-2xl p-3 md:p-4 flex items-center gap-2.5 cursor-pointer bg-white transition-all select-none min-h-[44px]">
+                                    <input type="checkbox" id="lang-Other" value="Другой" class="w-4.5 h-4.5 text-brand-600 focus:ring-brand-500 rounded shrink-0">
+                                    <span class="font-semibold text-slate-800 text-xs md:text-sm">Другой</span>
+                                </label>
+                                <label class="form-option-card border border-slate-200 rounded-xl md:rounded-2xl p-3 md:p-4 flex items-center gap-2.5 cursor-pointer bg-white transition-all select-none min-h-[44px]">
+                                    <input type="checkbox" id="lang-Planning" value="Планирую" class="w-4.5 h-4.5 text-brand-600 focus:ring-brand-500 rounded shrink-0">
+                                    <span class="font-semibold text-slate-800 text-xs md:text-sm">Планирую</span>
+                                </label>
+                            </div>
+
+                            <div id="dynamic-scores-container" class="space-y-4">
+                                <div id="score-box-IELTS" class="hidden transition-all duration-300">
+                                    <label class="text-[10px] md:text-xs font-bold text-slate-500 uppercase tracking-wider block mb-1">Полученный или ожидаемый балл IELTS:</label>
+                                    <input type="text" id="score-IELTS" placeholder="Например: 7.0" class="w-full max-w-sm border border-slate-200 rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-brand-500 font-semibold text-sm min-h-[44px]">
+                                </div>
+                                <div id="score-box-TOEFL" class="hidden transition-all duration-300">
+                                    <label class="text-[10px] md:text-xs font-bold text-slate-500 uppercase tracking-wider block mb-1">Полученный или ожидаемый балл TOEFL:</label>
+                                    <input type="text" id="score-TOEFL" placeholder="Например: 100" class="w-full max-w-sm border border-slate-200 rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-brand-500 font-semibold text-sm min-h-[44px]">
+                                </div>
+                                <div id="score-box-HSK" class="hidden transition-all duration-300">
+                                    <label class="text-[10px] md:text-xs font-bold text-slate-500 uppercase tracking-wider block mb-1">Полученный или ожидаемый балл HSK:</label>
+                                    <input type="text" id="score-HSK" placeholder="Например: HSK 4 (210 баллов)" class="w-full max-w-sm border border-slate-200 rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-brand-500 font-semibold text-sm min-h-[44px]">
+                                </div>
+                                <div id="score-box-SAT" class="hidden transition-all duration-300">
+                                    <label class="text-[10px] md:text-xs font-bold text-slate-500 uppercase tracking-wider block mb-1">Полученный или ожидаемый балл SAT:</label>
+                                    <input type="text" id="score-SAT" placeholder="Например: 1450" class="w-full max-w-sm border border-slate-200 rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-brand-500 font-semibold text-sm min-h-[44px]">
+                                </div>
+                                <div id="score-box-Other" class="hidden transition-all duration-300">
+                                    <label class="text-[10px] md:text-xs font-bold text-slate-500 uppercase tracking-wider block mb-1">Название и результат другого экзамена:</label>
+                                    <input type="text" id="score-Other" placeholder="Например: TestDaF TDN 4, DELF B2" class="w-full max-w-sm border border-slate-200 rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-brand-500 font-semibold text-sm min-h-[44px]">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- ШАГ 4: Экстракурикуларс -->
+                        <div id="form-step-4" class="step-container hidden space-y-4 md:space-y-6">
+                            <h3 class="text-base md:text-lg font-bold text-slate-900 mb-1">Внеучебные проекты и достижения</h3>
+                            <p class="text-[11px] md:text-xs text-slate-400 leading-relaxed mb-4">Выберите сферы, в которых вы принимали участие вне рамок школьной программы:</p>
+
+                            <div class="flex flex-wrap gap-2 md:gap-2.5 mb-6">
+                                <button type="button" onclick="toggleExtraTag('it')" id="tag-it" class="extra-tag border border-slate-200 rounded-xl md:rounded-full px-3 py-2 md:px-4 md:py-2 text-xs md:text-sm font-medium text-slate-600 bg-white flex items-center gap-1.5 transition-all hover:scale-[1.03] duration-150 active:scale-98 min-h-[38px] sm:min-h-[44px]">
+                                    <span>💻 IT/Программирование</span>
+                                </button>
+                                <button type="button" onclick="toggleExtraTag('sport')" id="tag-sport" class="extra-tag border border-slate-200 rounded-xl md:rounded-full px-3 py-2 md:px-4 md:py-2 text-xs md:text-sm font-medium text-slate-600 bg-white flex items-center gap-1.5 transition-all hover:scale-[1.03] duration-150 active:scale-98 min-h-[38px] sm:min-h-[44px]">
+                                    <span>⚽ Спорт</span>
+                                </button>
+                                <button type="button" onclick="toggleExtraTag('volunteer')" id="tag-volunteer" class="extra-tag border border-slate-200 rounded-xl md:rounded-full px-3 py-2 md:px-4 md:py-2 text-xs md:text-sm font-medium text-slate-600 bg-white flex items-center gap-1.5 transition-all hover:scale-[1.03] duration-150 active:scale-98 min-h-[38px] sm:min-h-[44px]">
+                                    <span>🌍 Волонтерство</span>
+                                </button>
+                                <button type="button" onclick="toggleExtraTag('art')" id="tag-art" class="extra-tag border border-slate-200 rounded-xl md:rounded-full px-3 py-2 md:px-4 md:py-2 text-xs md:text-sm font-medium text-slate-600 bg-white flex items-center gap-1.5 transition-all hover:scale-[1.03] duration-150 active:scale-98 min-h-[38px] sm:min-h-[44px]">
+                                    <span>🎨 Искусство</span>
+                                </button>
+                                <button type="button" onclick="toggleExtraTag('science')" id="tag-science" class="extra-tag border border-slate-200 rounded-xl md:rounded-full px-3 py-2 md:px-4 md:py-2 text-xs md:text-sm font-medium text-slate-600 bg-white flex items-center gap-1.5 transition-all hover:scale-[1.03] duration-150 active:scale-98 min-h-[38px] sm:min-h-[44px]">
+                                    <span>🔬 Наука</span>
+                                </button>
+                                <button type="button" onclick="toggleExtraTag('olympiad')" id="tag-olympiad" class="extra-tag border border-slate-200 rounded-xl md:rounded-full px-3 py-2 md:px-4 md:py-2 text-xs md:text-sm font-medium text-slate-600 bg-white flex items-center gap-1.5 transition-all hover:scale-[1.03] duration-150 active:scale-98 min-h-[38px] sm:min-h-[44px]">
+                                    <span>🏆 Олимпиады</span>
+                                </button>
+                            </div>
+
+                            <div class="space-y-2">
+                                <label for="custom_extracurriculars" class="text-xs md:text-sm font-semibold text-slate-700 block">Опишите ваши достижения более подробно:</label>
+                                <textarea id="custom_extracurriculars" name="custom_extracurriculars" rows="3" placeholder="Пример: создал школьное мобильное приложение, 2 года волонтерил в местной библиотеке, победитель конкурса проектов..."
+                                    class="w-full border border-slate-200 rounded-xl md:rounded-2xl p-3.5 md:p-4 focus:outline-none focus:ring-2 focus:ring-brand-500 text-xs md:text-sm leading-relaxed transition-all"></textarea>
+                            </div>
+                        </div>
+
+                        <!-- ШАГ 5: Страна и грант -->
+                        <div id="form-step-5" class="step-container hidden space-y-4 md:space-y-6">
+                            <h3 class="text-base md:text-lg font-bold text-slate-900 mb-1">Куда вы планируете поступать?</h3>
+                            <p class="text-[11px] md:text-xs text-slate-400 leading-relaxed mb-4">Укажите желаемые страны и цели, связанные с получением финансирования.</p>
+
+                            <textarea id="goals" name="goals" rows="4" placeholder="Пример: Италия или Германия, необходима стипендия с полным покрытием обучения и проживания."
+                                class="w-full border border-slate-200 rounded-xl md:rounded-2xl p-3.5 md:p-4 focus:outline-none focus:ring-2 focus:ring-brand-500 text-xs md:text-sm leading-relaxed mb-4 transition-all"></textarea>
+                        </div>
+
+                        <!-- ШАГ 6: Дополнительно -->
+                        <div id="form-step-6" class="step-container hidden space-y-4 md:space-y-6">
+                            <h3 class="text-base md:text-lg font-bold text-slate-900 mb-1">Дополнительная информация</h3>
+                            <p class="text-[11px] md:text-xs text-slate-400 leading-relaxed mb-4">Укажите ваш город/страну проживания и любые дополнительные детали о себе (что, когда, зачем), которые вы хотите сообщить нашему ИИ.</p>
+
+                            <div class="space-y-4">
+                                <div>
+                                    <label for="user_location" class="text-xs md:text-sm font-semibold text-slate-700 block mb-1.5">Город и страна проживания:</label>
+                                    <input type="text" id="user_location" name="user_location" placeholder="Пример: Алматы, Казахстан или Ташкент, Узбекистан"
+                                        class="w-full border border-slate-200 rounded-xl md:rounded-2xl p-3.5 md:p-4 focus:outline-none focus:ring-2 focus:ring-brand-500 text-xs md:text-sm transition-all min-h-[44px]">
+                                </div>
+                                <div>
+                                    <label for="about_self" class="text-xs md:text-sm font-semibold text-slate-700 block mb-1.5">Расскажите о себе (что считаете нужным добавить от себя):</label>
+                                    <textarea id="about_self" name="about_self" rows="4" placeholder="Пример: Увлекаюсь дебатами с 2025 года. Хочу поступать именно на специальность Bioinformatics, так как..."
+                                        class="w-full border border-slate-200 rounded-xl md:rounded-2xl p-3.5 md:p-4 focus:outline-none focus:ring-2 focus:ring-brand-500 text-xs md:text-sm leading-relaxed transition-all"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Кнопки Навигации по Форме -->
+                        <div class="mt-6 md:mt-8 pt-4 md:pt-6 border-t border-slate-100 flex flex-row items-center justify-between gap-3">
+                            <button type="button" id="prev-btn" onclick="prevStep()" class="opacity-0 pointer-events-none inline-flex items-center justify-center gap-1.5 px-4 py-3 md:py-3.5 rounded-xl text-sm font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-50/70 border border-slate-200/60 bg-white transition-all min-h-[44px] shrink-0 active:scale-95">
+                                <i data-lucide="arrow-left" class="w-4 h-4"></i>
+                                <span class="hidden xs:inline">Назад</span>
+                            </button>
+
+                            <button type="button" id="next-btn" onclick="nextStep()" class="inline-flex items-center justify-center gap-2 px-6 py-3 md:py-3.5 rounded-xl text-sm font-bold bg-brand-600 hover:bg-brand-700 text-white shadow-sm active:scale-95 transform transition-all duration-200 min-h-[44px] flex-1 sm:flex-initial">
+                                <span>Далее</span>
+                                <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                            </button>
+
+                            <button type="button" id="submit-btn" onclick="submitScanner()" class="hidden inline-flex items-center justify-center gap-2 px-6 py-3 md:py-3.5 rounded-xl text-sm font-bold bg-gradient-to-r from-slate-950 via-slate-900 to-slate-850 hover:from-slate-900 hover:to-slate-800 text-white shadow-md active:scale-95 transform transition-all duration-300 min-h-[44px] flex-1 sm:flex-initial">
+                                <i data-lucide="sparkles" class="w-4 h-4 text-brand-100"></i>
+                                <span>🚀 Запустить ИИ-сканирование</span>
+                            </button>
+                        </div>
+
+                    </form>
+
+                    <!-- Прелоадер загрузки результатов -->
+                    <div id="scanner-loader" class="absolute inset-0 bg-white/95 backdrop-blur-sm flex flex-col items-center justify-center hidden z-20 p-5 sm:p-6">
+                        <div class="loader-rings relative w-20 h-20 md:w-24 md:h-24 mb-5 md:mb-6">
+                            <div class="ring-pulse ring-1"></div>
+                            <div class="ring-pulse ring-2"></div>
+                            <div class="ring-pulse ring-3"></div>
+                            <div class="absolute inset-0 flex items-center justify-center">
+                                <i data-lucide="cpu" class="w-6 h-6 md:w-8 md:h-8 text-brand-600 animate-pulse"></i>
+                            </div>
+                        </div>
+                        <h4 class="font-display font-bold text-center text-sm md:text-lg text-slate-900 mb-1.5 md:mb-2 px-4">Aevome AI сканирует международные базы вузов...</h4>
+                        <p class="text-[11px] md:text-sm text-slate-500 text-center max-w-xs leading-relaxed px-4">
+                            Определяем вступительные требования и анализируем шансы на получение грантов...
+                        </p>
+                    </div>
+
+                </div>
+
+                <!-- БЛОК ВЫВОДА РЕЗУЛЬТАТОВ -->
+                <div id="results-section" class="hidden mt-10 md:mt-12 space-y-6 md:space-y-8">
+
+                    <div class="text-center">
+                        <div class="inline-flex items-center justify-center w-10 h-10 md:w-12 md:h-12 bg-emerald-50 rounded-full text-accent-emerald mb-3 md:mb-4 shadow-sm shadow-emerald-100">
+                            <i data-lucide="check-circle" class="w-5 h-5 md:w-6 md:h-6"></i>
+                        </div>
+                        <h3 class="font-display font-bold text-xl sm:text-2xl text-slate-900">ИИ-Отчет сформирован</h3>
+                        <p class="text-xs sm:text-sm text-slate-500 mt-1">Ознакомьтесь с подробным разбором вашего портфолио ниже</p>
+                    </div>
+
+                    <!-- Текстовый подробный отчет -->
+                    <div class="bg-white border border-slate-200/80 rounded-2xl md:rounded-3xl p-4 sm:p-6 md:p-8 shadow-[0_8px_30px_rgba(0,0,0,0.02)]">
+                        <div class="flex items-center gap-2 mb-4 md:mb-6 border-b border-slate-100 pb-3 md:pb-4">
+                            <i data-lucide="file-text" class="w-5 h-5 text-brand-500"></i>
+                            <h4 class="font-display font-bold text-base md:text-lg text-slate-900">Персональный Roadmap</h4>
+                        </div>
+
+                        <div id="markdown-report-output" class="prose prose-slate max-w-none text-slate-600 leading-relaxed space-y-4"></div>
+                    </div>
+
+                    <!-- Баннер сохранения профиля в Telegram-боте -->
+                    <div id="telegram-cta-container" class="hidden bg-gradient-to-br from-brand-500 via-brand-600 to-indigo-600 rounded-2xl md:rounded-3xl p-5 sm:p-8 md:p-10 text-white shadow-xl hover:shadow-2xl relative overflow-hidden transition-all duration-300 flex flex-col gap-4">
+                        <div class="hidden md:block absolute -right-20 -bottom-20 w-60 h-60 bg-white/5 rounded-full pointer-events-none"></div>
+
+                        <!-- Блок таймера перенесен в относительный поток на мобильных -->
+                        <div class="inline-flex md:absolute right-6 top-6 self-start bg-white/15 backdrop-blur-md px-3 py-1.5 rounded-xl items-center gap-2 text-[10px] md:text-xs font-bold uppercase tracking-wider">
+                            <i data-lucide="clock" class="w-3.5 h-3.5 animate-pulse shrink-0"></i>
+                            <span>Доступ закроется через <span id="countdown-clock">10:00</span></span>
+                        </div>
+
+                        <div class="max-w-xl space-y-3.5">
+                            <h4 class="font-display font-extrabold text-lg sm:text-xl md:text-3xl leading-snug">
+                                ⚠️ Сохраните результаты и Roadmap прямо сейчас!
+                            </h4>
+                            <p class="text-white/80 text-xs sm:text-sm leading-relaxed">
+                                Ваш профиль будет удален с сайта через 10 минут в целях конфиденциальности. Нажмите кнопку ниже, чтобы навсегда перенести карту развития в нашего Telegram-бота.
+                            </p>
+                            <p class="text-white/90 text-xs sm:text-sm font-semibold flex items-center gap-1.5">
+                                <i data-lucide="sparkles" class="w-4 h-4 text-brand-100 shrink-0"></i>
+                                <span>ИИ-консультант в Telegram запомнит ваши сильные и слабые стороны для дальнейшего разбора!</span>
+                            </p>
+                        </div>
+
+                        <div class="mt-4 md:mt-6">
+                            <a id="telegram-bot-link" href="#" target="_blank" class="inline-flex items-center justify-center gap-3 bg-white hover:bg-slate-50 text-slate-900 w-full sm:w-auto px-8 py-3.5 md:py-4 rounded-xl md:rounded-2xl font-bold text-sm md:text-base shadow-lg hover:scale-[1.02] active:scale-95 transform transition-all duration-300 min-h-[52px]">
+                                <i data-lucide="send" class="w-4.5 h-4.5 text-[#229ED9]"></i>
+                                <span>Перейти в Telegram-бот</span>
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+        <!-- FAQ Блок (Аккордеон) -->
+        <section id="faq" class="py-10 md:py-16 border-t border-slate-100 scroll-mt-14 md:scroll-mt-20">
+            <div class="max-w-3xl mx-auto">
+                <div class="text-center mb-8 md:mb-12">
+                    <h2 class="font-display font-bold text-xl sm:text-2xl md:text-3xl text-slate-900 mb-2 md:mb-3">Ответы на частые вопросы</h2>
+                    <p class="text-slate-500 text-xs sm:text-sm">Помощь и техническая информация</p>
+                </div>
+
+                <div class="space-y-3 md:space-y-4">
+                    <!-- Вопрос 1 -->
+                    <div class="bg-white border border-slate-100 rounded-xl md:rounded-2xl overflow-hidden shadow-sm">
+                        <button type="button" onclick="toggleFaq(1)" class="w-full flex items-center justify-between p-4 md:p-6 text-left font-semibold text-slate-900 hover:text-brand-600 transition-colors text-sm md:text-base min-h-[44px]">
+                            <span>Как работает ИИ-сканирование Aevome?</span>
+                            <i id="faq-icon-1" data-lucide="chevron-down" class="w-4 h-4 md:w-5 md:h-5 text-slate-400 transform transition-transform shrink-0"></i>
+                        </button>
+                        <div id="faq-content-1" class="hidden px-4 pb-4 md:px-6 md:pb-6 text-slate-500 text-xs md:text-sm leading-relaxed border-t border-slate-50/50 pt-3 md:pt-4">
+                            Наш ИИ сопоставляет ваши вводные данные (успеваемость, уровень владения иностранными языками, наличие научных, волонтерских или спортивных достижений) со вступительными требованиями сотен университетов и актуальных грантовых программ. В результате генерируется стратегия.
+                        </div>
+                    </div>
+
+                    <!-- Вопрос 2 -->
+                    <div class="bg-white border border-slate-150 rounded-xl md:rounded-2xl overflow-hidden shadow-sm">
+                        <button type="button" onclick="toggleFaq(2)" class="w-full flex items-center justify-between p-4 md:p-6 text-left font-semibold text-slate-900 hover:text-brand-600 transition-colors text-sm md:text-base min-h-[44px]">
+                            <span>Зачем нужна синхронизация с Telegram-ботом?</span>
+                            <i id="faq-icon-2" data-lucide="chevron-down" class="w-4 h-4 md:w-5 md:h-5 text-slate-400 transform transition-transform shrink-0"></i>
+                        </button>
+                        <div id="faq-content-2" class="hidden px-4 pb-4 md:px-6 md:pb-6 text-slate-500 text-xs md:text-sm leading-relaxed border-t border-slate-50/50 pt-3 md:pt-4">
+                            Временная сессия на сайте существует всего 10 минут для конфиденциальности ваших данных. Переход по ссылке в бота надежно связывает сгенерированное досье (включая ваши слабые стороны) с вашим аккаунтом Telegram, позволяя ИИ-ментору присылать советы и отслеживать прогресс 24/7.
+                        </div>
+                    </div>
+
+                    <!-- Вопрос 3 -->
+                    <div class="bg-white border border-slate-150 rounded-xl md:rounded-2xl overflow-hidden shadow-sm">
+                        <button type="button" onclick="toggleFaq(3)" class="w-full flex items-center justify-between p-4 md:p-6 text-left font-semibold text-slate-900 hover:text-brand-600 transition-colors text-sm md:text-base min-h-[44px]">
+                            <span>Какие страны и направления поддерживает Aevome AI?</span>
+                            <i id="faq-icon-3" data-lucide="chevron-down" class="w-4 h-4 md:w-5 md:h-5 text-slate-400 transform transition-transform shrink-0"></i>
+                        </button>
+                        <div id="faq-content-3" class="hidden px-4 pb-4 md:px-6 md:pb-6 text-slate-500 text-xs md:text-sm leading-relaxed border-t border-slate-50/50 pt-3 md:pt-4">
+                            Система обучена на требованиях университетов США (включая Лигу Плюща), стран Европы (Италия, Германия, Австрия, Чехия и др.), Великобритании, а также ведущих вузов Азии (Китай, Южная Корея, Сингапур). ИИ адаптируется под любые цели — от бакалавриата до магистратуры.
+                        </div>
+                    </div>
+
+                    <!-- Вопрос 4 -->
+                    <div class="bg-white border border-slate-150 rounded-xl md:rounded-2xl overflow-hidden shadow-sm">
+                        <button type="button" onclick="toggleFaq(4)" class="w-full flex items-center justify-between p-4 md:p-6 text-left font-semibold text-slate-900 hover:text-brand-600 transition-colors text-sm md:text-base min-h-[44px]">
+                            <span>Что делать, если у меня низкий GPA или нет языкового сертификата?</span>
+                            <i id="faq-icon-4" data-lucide="chevron-down" class="w-4 h-4 md:w-5 md:h-5 text-slate-400 transform transition-transform shrink-0"></i>
+                        </button>
+                        <div id="faq-content-4" class="hidden px-4 pb-4 md:px-6 md:pb-6 text-slate-500 text-xs md:text-sm leading-relaxed border-t border-slate-50/50 pt-3 md:pt-4">
+                            Не паниковать. ИИ-сканер выявит эти риски как слабые стороны и предложит альтернативные траектории поступления. Например, подготовительные программы (Foundation Year), вузы с внутренними языковыми тестами или компенсацию низкого GPA за счет сильного компенсационного портфолио проектов.
+                        </div>
+                    </div>
+
+                    <!-- Вопрос 5 -->
+                    <div class="bg-white border border-slate-150 rounded-xl md:rounded-2xl overflow-hidden shadow-sm">
+                        <button type="button" onclick="toggleFaq(5)" class="w-full flex items-center justify-between p-4 md:p-6 text-left font-semibold text-slate-900 hover:text-brand-600 transition-colors text-sm md:text-base min-h-[44px]">
+                            <span>Платный ли сервис Aevome AI?</span>
+                            <i id="faq-icon-5" data-lucide="chevron-down" class="w-4 h-4 md:w-5 md:h-5 text-slate-400 transform transition-transform shrink-0"></i>
+                        </button>
+                        <div id="faq-content-5" class="hidden px-4 pb-4 md:px-6 md:pb-6 text-slate-500 text-xs md:text-sm leading-relaxed border-t border-slate-50/50 pt-3 md:pt-4">
+                            Базовое сканирование профиля, составление первичной дорожной карты и общение со справочным ИИ-консультантом в Telegram полностью бесплатны. Дополнительные редкие разборы грантов и углубленное ведение за руку публикуются в нашем официальном канале и боте.
+                        </div>
+                    </div>
+
+                    <!-- Вопрос 6 -->
+                    <div class="bg-white border border-slate-150 rounded-xl md:rounded-2xl overflow-hidden shadow-sm">
+                        <button type="button" onclick="toggleFaq(6)" class="w-full flex items-center justify-between p-4 md:p-6 text-left font-semibold text-slate-900 hover:text-brand-600 transition-colors text-sm md:text-base min-h-[44px]">
+                            <span>Безопасно ли хранятся мои личные данные в системе?</span>
+                            <i id="faq-icon-6" data-lucide="chevron-down" class="w-4 h-4 md:w-5 md:h-5 text-slate-400 transform transition-transform shrink-0"></i>
+                        </button>
+                        <div id="faq-content-6" class="hidden px-4 pb-4 md:px-6 md:pb-6 text-slate-500 text-xs md:text-sm leading-relaxed border-t border-slate-50/50 pt-3 md:pt-4">
+                            Да, конфиденциальность — наш приоритет. Все данные анкеты передаются в зашифрованном виде через Supabase. Временная сессия на сайте автоматически стирается через 10 минут в целях безопасности, а ваш профиль надежно переносится в ваш личный аккаунт Telegram.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Подвал (Footer) -->
+    <footer class="bg-white border-t border-slate-150 mt-12 md:mt-20 relative z-10">
+        <div class="max-w-7xl mx-auto px-4 xs:px-5 sm:px-6 lg:px-8 py-8 md:py-12 flex flex-col md:flex-row items-center justify-between gap-6">
+            <div class="flex flex-col sm:flex-row items-center gap-2 text-center sm:text-left">
+                <span class="font-display font-extrabold text-lg tracking-tight text-slate-900">
+                    Aevome<span class="inline-block w-1.5 h-1.5 bg-brand-500 rounded-full ml-1"></span>
+                </span>
+                <span class="text-xs text-slate-400">© 2026. Все права защищены.</span>
+            </div>
+
+            <div class="flex items-center gap-6 text-sm text-slate-500">
+                <a href="https://t.me/aevome_channel" target="_blank" class="hover:text-slate-900 flex items-center gap-1 transition-colors">
+                    <i data-lucide="send" class="w-4 h-4"></i>
+                    <span>Канал</span>
+                </a>
+                <a href="https://t.me/aevome_bot" target="_blank" class="hover:text-slate-900 flex items-center gap-1 transition-colors">
+                    <i data-lucide="bot" class="w-4 h-4"></i>
+                    <span>Бот</span>
+                </a>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>

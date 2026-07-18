@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="ru" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>🧭 Гид по поступлению & Словарь — Aevome AI</title>
+
+    <!-- Подключение Tailwind CSS v3 -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts: Plus Jakarta Sans & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Подключение кастомных стилей -->
+    <link rel="stylesheet" href="style.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Plus Jakarta Sans', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f5f3ff',
+                            100: '#ede9fe',
+                            500: '#8b5cf6',
+                            600: '#7c3aed',
+                            700: '#6d28d9',
+                        },
+                        accent: {
+                            blue: '#3b82f6',
+                            emerald: '#10b981',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-[#FCFCFD] text-slate-800 font-sans min-h-screen relative overflow-x-hidden">
+
+    <!-- Фоновый слой -->
+    <div class="absolute inset-0 overflow-hidden pointer-events-none z-0">
+        <div class="absolute inset-0 bg-grid-pattern"></div>
+        <div class="absolute top-0 left-1/4 w-[300px] sm:w-[800px] h-[300px] sm:h-[800px] gradient-glow-1"></div>
+    </div>
+
+    <!-- Шапка сайта (Header) -->
+    <header class="sticky top-0 z-50 backdrop-blur-md bg-[#FCFCFD]/85 border-b border-slate-100/80">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-8">
+                <a href="index.html" class="flex items-center gap-2">
+                    <span class="font-display font-extrabold text-2xl tracking-tight text-slate-900 flex items-center">
+                        aevome<span class="inline-block w-2.5 h-2.5 bg-brand-500 rounded-full ml-1 animate-pulse-slow"></span>
+                    </span>
+                </a>
+                <nav class="hidden md:flex items-center gap-6 text-sm font-medium text-slate-600">
+                    <a href="index.html#how-it-works" class="hover:text-brand-600 transition-colors">Как это работает</a>
+                    <a href="index.html#features" class="hover:text-brand-600 transition-colors">Преимущества</a>
+                    <a href="index.html#scanner" class="hover:text-brand-600 transition-colors">ИИ-Сканер</a>
+                    <a href="glossary.html" class="text-brand-600 transition-colors font-semibold">🧭 Гид по поступлению & Словарь</a>
+                </nav>
+            </div>
+
+            <div class="flex items-center gap-2 sm:gap-4">
+                <a href="https://t.me/aevome_channel" target="_blank" class="hidden sm:inline-flex items-center gap-1.5 text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors">
+                    <i data-lucide="send" class="w-4 h-4 text-[#229ED9]"></i> Канал
+                </a>
+                <a href="https://t.me/aevome_bot" target="_blank" class="hidden sm:inline-flex items-center gap-2 bg-slate-900 hover:bg-slate-800 text-white px-4 py-2 rounded-xl text-sm font-semibold shadow-sm hover:shadow-md transition-all">
+                    <span>🚀 Запустить бота</span>
+                    <i data-lucide="arrow-up-right" class="w-4 h-4"></i>
+                </a>
+                <button type="button" onclick="toggleMobileMenu()" class="inline-flex md:hidden p-2 rounded-xl border border-slate-200 bg-white text-slate-700">
+                    <i data-lucide="menu" class="w-6 h-6"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Выдвижное мобильное меню -->
+    <div id="mobile-menu" class="hidden fixed inset-0 z-50 bg-[#FCFCFD]/95 backdrop-blur-xl flex flex-col p-6 animate-fade-in-up">
+        <div class="flex items-center justify-between pb-8 border-b border-slate-100">
+            <span class="font-display font-extrabold text-2xl tracking-tight text-slate-900">
+                aevome<span class="inline-block w-2.5 h-2.5 bg-brand-500 rounded-full ml-1"></span>
+            </span>
+            <button type="button" onclick="toggleMobileMenu()" class="p-2 rounded-xl border border-slate-200 bg-white text-slate-700">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+        </div>
+        <nav class="flex flex-col gap-6 py-10 text-lg font-semibold text-slate-800">
+            <a href="index.html#how-it-works" onclick="toggleMobileMenu()" class="hover:text-brand-600 transition-colors">Как это работает</a>
+            <a href="index.html#features" onclick="toggleMobileMenu()" class="hover:text-brand-600 transition-colors">Преимущества</a>
+            <a href="index.html#scanner" onclick="toggleMobileMenu()" class="hover:text-brand-600 transition-colors">ИИ-Сканер</a>
+            <a href="glossary.html" onclick="toggleMobileMenu()" class="text-brand-600 transition-colors">🧭 Гид по поступлению & Словарь</a>
+        </nav>
+        <div class="mt-auto space-y-4">
+            <a href="https://t.me/aevome_channel" target="_blank" class="w-full inline-flex items-center justify-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-700 py-3.5 rounded-2xl font-bold transition-all">
+                <i data-lucide="send" class="w-5 h-5 text-[#229ED9]"></i>
+                <span>Подписаться на канал</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Основной блок (Контент) -->
+    <main class="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+
+        <!-- Хлебные крошки -->
+        <nav class="flex items-center gap-2 text-sm font-medium text-slate-500 mb-6">
+            <a href="index.html" class="hover:text-slate-800 transition-colors">Главная</a>
+            <i data-lucide="chevron-right" class="w-4 h-4 text-slate-300"></i>
+            <span class="text-slate-800">🧭 Гид по поступлению & Словарь</span>
+        </nav>
+
+        <!-- Переключатель глобальных вкладок (Гид против Глоссария) -->
+        <div class="flex bg-slate-100 p-1.5 rounded-2xl max-w-xl mx-auto mb-8 sm:mb-12 shadow-inner">
+            <button onclick="switchGlobalTab('guide')" id="tab-btn-guide" class="flex-1 py-3 px-4 rounded-xl text-xs sm:text-sm font-bold transition-all flex items-center justify-center gap-2 bg-white text-brand-700 shadow-sm">
+                <i data-lucide="rocket" class="w-4.5 h-4.5"></i>
+                <span>🚀 С чего начать? (Гид с нуля)</span>
+            </button>
+            <button onclick="switchGlobalTab('glossary')" id="tab-btn-glossary" class="flex-1 py-3 px-4 rounded-xl text-xs sm:text-sm font-bold transition-all flex items-center justify-center gap-2 text-slate-600 hover:text-slate-900">
+                <i data-lucide="book-open" class="w-4.5 h-4.5"></i>
+                <span>📖 Словарь терминов</span>
+            </button>
+        </div>
+
+        <!-- ================= РАЗДЕЛ 1: ПОШАГОВЫЙ ГИД «ПОСТУПЛЕНИЕ С НУЛЯ» ================= -->
+        <section id="section-guide" class="space-y-8 sm:space-y-12">
+
+            <!-- Шапка гида -->
+            <div class="bg-white border border-slate-200/80 rounded-3xl p-6 sm:p-10 shadow-[0_8px_30px_rgba(0,0,0,0.01)] text-center sm:text-left">
+                <div class="max-w-3xl">
+                    <span class="inline-flex items-center gap-1.5 bg-brand-50 border border-brand-100 rounded-full px-3 py-1 mb-4 text-xs font-semibold text-brand-700">
+                        <span class="w-1.5 h-1.5 bg-brand-500 rounded-full animate-ping"></span>
+                        Инструкция для тех, кто в самом начале пути
+                    </span>
+                    <h1 class="font-display font-extrabold text-2xl sm:text-4xl text-slate-900 mb-4 leading-tight">Как поступить за границу на грант, если вы ничего об этом не знаете?</h1>
+                    <p class="text-slate-600 text-sm sm:text-base leading-relaxed">Поступление в зарубежный вуз — это не лотерея и не привилегия для избранных. Это четкий проект, состоящий из понятных этапов. Ниже представлена базовая дорожная карта, которая разложит кашу в голове по полочкам.</p>
+                </div>
+            </div>
+
+            <!-- Интерактивный таймлайн по классам -->
+            <div class="bg-gradient-to-br from-slate-900 via-slate-850 to-indigo-950 rounded-3xl p-6 sm:p-8 text-white shadow-xl">
+                <div class="mb-6 text-center sm:text-left">
+                    <h2 class="font-display font-bold text-xl sm:text-2xl mb-2">⚡️ Ваш план действий по классам</h2>
+                    <p class="text-indigo-200 text-xs sm:text-sm">Выберите ваш текущий учебный статус, чтобы увидеть фокус подготовки на этот год:</p>
+                </div>
+
+                <!-- Кнопки выбора класса -->
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 mb-8">
+                    <button onclick="selectGradeTimeline('9')" id="btn-grade-9" class="grade-timeline-btn py-3 px-4 rounded-xl font-bold text-xs sm:text-sm transition-all border border-white/20 bg-white/10 text-white hover:bg-white/15">
+                        9 класс
+                    </button>
+                    <button onclick="selectGradeTimeline('10')" id="btn-grade-10" class="grade-timeline-btn py-3 px-4 rounded-xl font-bold text-xs sm:text-sm transition-all border border-white/20 bg-white/10 text-white hover:bg-white/15">
+                        10 класс
+                    </button>
+                    <button onclick="selectGradeTimeline('11')" id="btn-grade-11" class="grade-timeline-btn py-3 px-4 rounded-xl font-bold text-xs sm:text-sm transition-all border border-brand-500 bg-brand-600 text-white shadow-md">
+                        11 класс
+                    </button>
+                    <button onclick="selectGradeTimeline('grad')" id="btn-grade-grad" class="grade-timeline-btn py-3 px-4 rounded-xl font-bold text-xs sm:text-sm transition-all border border-white/20 bg-white/10 text-white hover:bg-white/15">
+                        Выпускник
+                    </button>
+                </div>
+
+                <!-- Вывод текста таймлайна -->
+                <div id="timeline-text-content" class="bg-white/5 border border-white/10 rounded-2xl p-5 sm:p-6 space-y-4 animate-fade-in-up">
+                    <!-- Заполняется динамически через JS -->
+                </div>
+            </div>
+
+            <!-- Пять фундаментальных шагов -->
+            <div class="space-y-6">
+                <div class="text-center sm:text-left">
+                    <h2 class="font-display font-bold text-xl sm:text-2xl text-slate-900 mb-2">5 ключевых шагов подготовки</h2>
+                    <p class="text-slate-500 text-xs sm:text-sm">Поэтапный процесс, который проходят успешные абитуриенты</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+                    <!-- Шаг 1 -->
+                    <div class="bg-white border border-slate-150 rounded-2xl p-5 space-y-3 relative overflow-hidden group hover:border-brand-500/40 transition-all">
+                        <div class="w-10 h-10 bg-brand-50 rounded-xl flex items-center justify-center text-brand-600 font-bold font-display text-sm">1</div>
+                        <h3 class="font-display font-bold text-sm text-slate-950">Анализ бюджета и целей</h3>
+                        <p class="text-slate-500 text-xs leading-relaxed">Определитесь: нужен ли полный грант уровня <a href="javascript:void(0)" onclick="jumpToGlossaryTerm('Need-Blind')" class="text-brand-600 hover:text-brand-700 font-bold transition-all">Need-Blind</a> или вы готовы оплачивать обучение в госуниверситетах ЕС.</p>
+                    </div>
+                    <!-- Шаг 2 -->
+                    <div class="bg-white border border-slate-150 rounded-2xl p-5 space-y-3 relative overflow-hidden group hover:border-brand-500/40 transition-all">
+                        <div class="w-10 h-10 bg-brand-50 rounded-xl flex items-center justify-center text-brand-600 font-bold font-display text-sm">2</div>
+                        <h3 class="font-display font-bold text-sm text-slate-950">Языковой барьер</h3>
+                        <p class="text-slate-500 text-xs leading-relaxed">Начните подготовку к языковым экзаменам (<a href="javascript:void(0)" onclick="jumpToGlossaryTerm('IELTS')" class="text-brand-600 hover:text-brand-700 font-bold transition-all">IELTS</a>, <a href="javascript:void(0)" onclick="jumpToGlossaryTerm('TOEFL')" class="text-brand-600 hover:text-brand-700 font-bold transition-all">TOEFL</a>) за 1-2 года до подачи документов.</p>
+                    </div>
+                    <!-- Шаг 3 -->
+                    <div class="bg-white border border-slate-150 rounded-2xl p-5 space-y-3 relative overflow-hidden group hover:border-brand-500/40 transition-all">
+                        <div class="w-10 h-10 bg-brand-50 rounded-xl flex items-center justify-center text-brand-600 font-bold font-display text-sm">3</div>
+                        <h3 class="font-display font-bold text-sm text-slate-950">Академический фокус</h3>
+                        <p class="text-slate-500 text-xs leading-relaxed">Держите школьные оценки (<a href="javascript:void(0)" onclick="jumpToGlossaryTerm('GPA')" class="text-brand-600 hover:text-brand-700 font-bold transition-all">GPA</a>) максимально высокими. Это ключевой маркер ваших способностей.</p>
+                    </div>
+                    <!-- Шаг 4 -->
+                    <div class="bg-white border border-slate-150 rounded-2xl p-5 space-y-3 relative overflow-hidden group hover:border-brand-500/40 transition-all">
+                        <div class="w-10 h-10 bg-brand-50 rounded-xl flex items-center justify-center text-brand-600 font-bold font-display text-sm">4</div>
+                        <h3 class="font-display font-bold text-sm text-slate-950">Прокачка профиля</h3>
+                        <p class="text-slate-500 text-xs leading-relaxed">Развивайте <a href="javascript:void(0)" onclick="jumpToGlossaryTerm('Extracurriculars')" class="text-brand-600 hover:text-brand-700 font-bold transition-all">внеучебную деятельность</a>, чтобы показать приемной комиссии свои сильные стороны.</p>
+                    </div>
+                    <!-- Шаг 5 -->
+                    <div class="bg-white border border-slate-150 rounded-2xl p-5 space-y-3 relative overflow-hidden group hover:border-brand-500/40 transition-all">
+                        <div class="w-10 h-10 bg-brand-50 rounded-xl flex items-center justify-center text-brand-600 font-bold font-display text-sm">5</div>
+                        <h3 class="font-display font-bold text-sm text-slate-950">Сбор документов</h3>
+                        <p class="text-slate-500 text-xs leading-relaxed">Потребуется написать эссе (<a href="javascript:void(0)" onclick="jumpToGlossaryTerm('Motivation')" class="text-brand-600 hover:text-brand-700 font-bold transition-all">мотивационное письмо / SOP</a>) и получить отзывы от учителей.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ссылка на сканер на главной странице -->
+            <div class="bg-brand-50 border border-brand-100 rounded-3xl p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-6">
+                <div class="space-y-1.5 text-center sm:text-left">
+                    <h3 class="font-display font-bold text-base sm:text-lg text-brand-900 flex items-center justify-center sm:justify-start gap-1.5">
+                        <i data-lucide="sparkles" class="w-5 h-5 text-brand-600"></i>
+                        Хотите получить персонализированную стратегию?
+                    </h3>
+                    <p class="text-brand-700 text-xs sm:text-sm">Используйте наш бесплатный ИИ-сканер профиля на главной странице. ИИ проанализирует ваши шансы и подберет вузы.</p>
+                </div>
+                <a href="index.html#scanner" class="bg-brand-600 hover:bg-brand-700 text-white px-6 py-3 rounded-xl font-bold text-xs sm:text-sm shadow-md transition-all shrink-0 active:scale-95">
+                    Пройти ИИ-сканирование
+                </a>
+            </div>
+
+        </section>
+
+        <!-- ================= РАЗДЕЛ 2: АКАДЕМИЧЕСКИЙ ГЛОССАРИЙ ТЕРМИНОВ ================= -->
+        <section id="section-glossary" class="space-y-8 sm:space-y-12 hidden">
+
+            <div class="bg-white border border-slate-200/80 rounded-3xl p-6 sm:p-10 shadow-[0_8px_30px_rgba(0,0,0,0.01)]">
+                <div class="text-center sm:text-left border-b border-slate-100 pb-6 mb-8">
+                    <h2 class="font-display font-extrabold text-2xl sm:text-3xl text-slate-900 mb-2">Глоссарий терминов и элитных вузов</h2>
+                    <p class="text-slate-500 text-sm">Используйте поиск и фильтры, чтобы найти информацию о вузах Лиги Плюща, экзаменах или типах подачи документов.</p>
+                </div>
+
+                <!-- Строка поиска и Фильтры -->
+                <div class="space-y-6 mb-8">
+                    <div class="relative w-full">
+                        <span class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400">
+                            <i data-lucide="search" class="w-5 h-5"></i>
+                        </span>
+                        <input type="text" id="glossary-search" oninput="filterGlossary()" placeholder="Поиск термина или вуза (например: Harvard, Early Decision, GPA, SAT...)"
+                               class="w-full bg-slate-50 border border-slate-200 rounded-2xl py-3.5 pl-12 pr-4 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/50 focus:border-brand-500 transition-all">
+                    </div>
+
+                    <!-- Быстрые фильтры по категориям -->
+                    <div class="flex flex-wrap gap-2" id="category-filters">
+                        <button onclick="selectCategory('all')" id="cat-all" class="cat-btn bg-brand-600 text-white border border-brand-600 rounded-full px-4 py-1.5 text-xs font-semibold transition-all">
+                            Все термины
+                        </button>
+                        <button onclick="selectCategory('ivy')" id="cat-ivy" class="cat-btn bg-white text-slate-600 border border-slate-200 hover:border-slate-300 rounded-full px-4 py-1.5 text-xs font-semibold transition-all">
+                            Лига Плюща & Топ-Вузы
+                        </button>
+                        <button onclick="selectCategory('admissions')" id="cat-admissions" class="cat-btn bg-white text-slate-600 border border-slate-200 hover:border-slate-300 rounded-full px-4 py-1.5 text-xs font-semibold transition-all">
+                            Процесс подачи
+                        </button>
+                        <button onclick="selectCategory('exams')" id="cat-exams" class="cat-btn bg-white text-slate-600 border border-slate-200 hover:border-slate-300 rounded-full px-4 py-1.5 text-xs font-semibold transition-all">
+                            Экзамены & Тесты
+                        </button>
+                        <button onclick="selectCategory('metrics')" id="cat-metrics" class="cat-btn bg-white text-slate-600 border border-slate-200 hover:border-slate-300 rounded-full px-4 py-1.5 text-xs font-semibold transition-all">
+                            Метрики и Успеваемость
+                        </button>
+                        <button onclick="selectCategory('funding')" id="cat-funding" class="cat-btn bg-white text-slate-600 border border-slate-200 hover:border-slate-300 rounded-full px-4 py-1.5 text-xs font-semibold transition-all">
+                            Гранты и Финансирование
+                        </button>
+                        <button onclick="selectCategory('docs')" id="cat-docs" class="cat-btn bg-white text-slate-600 border border-slate-200 hover:border-slate-300 rounded-full px-4 py-1.5 text-xs font-semibold transition-all">
+                            Документы & Эссе
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Контейнер для вывода терминов -->
+                <div id="glossary-container" class="space-y-4">
+                    <!-- Сюда динамически рендерятся элементы JS -->
+                </div>
+
+                <!-- Заглушка, если ничего не найдено -->
+                <div id="no-results" class="hidden text-center py-12 border border-dashed border-slate-100 rounded-2xl bg-slate-50/50">
+                    <i data-lucide="help-circle" class="w-10 h-10 text-slate-400 mx-auto mb-2 animate-bounce"></i>
+                    <p class="text-slate-500 text-sm">Такого термина или университета не найдено. Попробуйте изменить поисковый запрос.</p>
+                </div>
+            </div>
+
+        </section>
+    </main>
+
+    <!-- Подвал (Footer) -->
+    <footer class="bg-white border-t border-slate-150 mt-12 md:mt-20 relative z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 flex flex-col sm:flex-row items-center justify-between gap-6">
+            <div class="flex items-center gap-2">
+                <span class="font-display font-extrabold text-lg tracking-tight text-slate-900">
+                    Aevome<span class="inline-block w-1.5 h-1.5 bg-brand-500 rounded-full ml-1"></span>
+                </span>
+                <span class="text-xs text-slate-400">© 2026. Все права защищены.</span>
+            </div>
+
+            <div class="flex items-center gap-6 text-sm text-slate-500">
+                <a href="https://t.me/aevome_channel" target="_blank" class="hover:text-slate-900 flex items-center gap-1 transition-colors">
+                    <i data-lucide="send" class="w-4 h-4"></i>
+                    <span>Канал</span>
+                </a>
+                <a href="https://t.me/aevome_bot" target="_blank" class="hover:text-slate-900 flex items-center gap-1 transition-colors">
+                    <i data-lucide="bot" class="w-4 h-4"></i>
+                    <span>Бот</span>
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Логика работы словаря и гида -->
+    <script>
+        // Данные словаря
+        const glossaryData = [
+            // ================= ЛИГА ПЛЮЩА (IVY LEAGUE) =================
+            {
+                term: "Harvard University (Гарвардский университет)",
+                category: "ivy",
+                short: "Основан в 1636 году (Кембридж, Массачусетс). Старейший и один из самых авторитетных университетов США.",
+                details: "Показатель приема (Acceptance Rate) — около 3-4%. Известен сильнейшими программами в праве, бизнесе, медицине и гуманитарных науках. Требует идеальных показателей: GPA 4.0/4.0 (5.0/5.0), SAT 1520-1600 и выдающегося портфолио с национальными или международными достижениями. Гарвард вернул обязательное предоставление результатов SAT/ACT."
+            },
+            {
+                term: "Yale University (Йельский университет)",
+                category: "ivy",
+                short: "Основан в 1701 году (Нью-Хейвен, Коннектикут). Славится своей системой жилых колледжей и программами в сфере искусств и права.",
+                details: "Показатель приема — около 4-5%. Считается главным конкурентом Гарварда в гуманитарных дисциплинах. Йель ценит сильный и уникальный голос абитуриента в эссе (Supplements) и его вклад в развитие общества. Начиная с 2025/2026 годов, Йель перешел на политику 'Test-Flexible' (требуется SAT, ACT, AP или IB)."
+            },
+            {
+                term: "Princeton University (Принстонский университет)",
+                category: "ivy",
+                short: "Основан в 1746 году (Принстон, Нью-Джерси). Фокусируется преимущественно на исследованиях и бакалавриате.",
+                details: "Показатель приема — около 4-5%. В отличие от большинства элитных вузов, Принстон требует обязательное написание выпускной научной работы (Senior Thesis) от всех студентов бакалавриата. Известен невероятной силой факультетов математики, теоретической физики и международных отношений. SAT/ACT временно опционален, но строго рекомендуется."
+            },
+            {
+                term: "Columbia University (Колумбийский университет)",
+                category: "ivy",
+                short: "Основан в 1754 году. Расположен прямо в Нью-Йорке на Манхэттене, что дает колоссальные карьерные возможности.",
+                details: "Показатель приема — около 3.9%. Отличается строгой и неизменной общей учебной программой (The Core Curriculum), обязательной для всех студентов независимо от их специальности. Колумбийский университет официально заявляет о постоянной политике Test-Optional для американских абитуриентов, но для сильных иностранных заявок SAT/ACT остается критически важным дополнением."
+            },
+            {
+                term: "University of Pennsylvania (UPenn / Пенсильванский университет)",
+                category: "ivy",
+                short: "Основан Бенджамином Франклином в 1740 году (Филадельфия, Пенсильвания). Место расположения легендарной бизнес-школы Wharton.",
+                details: "Показатель приема — около 5-6%. UPenn славится практической направленностью образования и развитием междисциплинарных программ (например, двойные дипломы по технологиям и бизнесу). Wharton School — старейшая и самая престижная бизнес-школа бакалавриата в мире. Для поступления на Wharton необходимы выдающиеся успехи в математике и практический опыт предпринимательства."
+            },
+            {
+                term: "Brown University (Брауновский университет)",
+                category: "ivy",
+                short: "Основан в 1764 году (Провиденс, Род-Айленд). Самый прогрессивный и гибкий университет Лиги Плюща.",
+                details: "Показатель приема — около 5%. Знаменит своей программой 'Open Curriculum': студенты могут самостоятельно конструировать весь учебный план без каких-либо обязательных общих предметов. Браун ищет самостоятельных, творческих исследователей с проявленной гражданской позицией. Требует обязательное предоставление результатов тестов SAT/ACT."
+            },
+            {
+                term: "Dartmouth College (Дартмутский колледж)",
+                category: "ivy",
+                short: "Основан в 1769 году (Хановер, Нью-Гэмпшир). Традиционный колледж, расположенный в живописной горной местности.",
+                details: "Показатель приема — около 6%. Известен уникальной системой триместров (D-Plan), сплоченной студенческой культурой и колоссальным уклоном в сторону развития бакалавров (в отличие от исследовательских аспирантур в других вузах Лиги). Дартмут стал первым вузом Лиги Плюща, который официально вернул обязательный SAT/ACT, заявив, что тесты помогают находить таланты из неблагополучных школ."
+            },
+            {
+                term: "Cornell University (Корнеллский университет)",
+                category: "ivy",
+                short: "Основан в 1865 году (Итака, Нью-Йорк). Самый крупный университет Лиги Плюща по числу студентов.",
+                details: "Показатель приема — около 7-8%. Построен по принципу: 'Any person can find instruction in any study'. Обладает выдающимися программами по инженерии, архитектуре, сельскому хозяйству и гостиничному бизнесу. Самый открытый из всех вузов Плюща, но по-прежнему требует выдающийся академический бэкграунд."
+            },
+
+            // ================= ПРОЦЕСС ПОДАЧИ (ADMISSIONS) =================
+            {
+                term: "Early Decision (ED) — Раннее решение",
+                category: "admissions",
+                short: "Эксклюзивный, обязывающий (binding) раунд подачи документов с дедлайном 1 ноября.",
+                details: "При подаче ED абитуриент подписывает контракт о том, что в случае зачисления он гарантированно обязуется отозвать заявления из всех остальных вузов мира и поступить именно сюда. Шанс зачисления на раунде ED обычно в 2-4 раза выше, чем на Regular Decision, так как вузы гарантируют себе высокий процент зачисления (Yield Rate)."
+            },
+            {
+                term: "Early Action (EA) — Раннее действие",
+                category: "admissions",
+                short: "Необязывающий (non-binding) раунд подачи документов с дедлайном 1 ноября.",
+                details: "Абитуриент получает решение вуза уже в середине декабря, но имеет полное право не соглашаться на поступление и дожидаться ответов других вузов до 1 мая. Позволяет подавать ранние документы в неограниченное число университетов."
+            },
+            {
+                term: "REA / SCEA (Restrictive Early Action)",
+                category: "admissions",
+                short: "Ограничительный ранний раунд, используемый Harvard, Yale, Princeton, Stanford.",
+                details: "Раунд является необязывающим (вам не нужно сразу соглашаться), но ставит жесткое ограничение: вы не имеете права подавать документы по ранним раундам (ED/EA) в любые другие частные университеты США. Подача в государственные (Public) и зарубежные вузы при этом обычно разрешена."
+            },
+            {
+                term: "Regular Decision (RD) — Регулярный раунд",
+                category: "admissions",
+                short: "Основной и самый массовый раунд подачи документов с дедлайнами в районе 1-15 января.",
+                details: "Решения о зачислении публикуются в конце марта (знаменитый Ivy Day для Лиги Плюща). Из-за огромного потока кандидатов конкурс на RD раунде является максимально жестким."
+            },
+            {
+                term: "Rolling Admissions — Потоковый прием",
+                category: "admissions",
+                short: "Система, при которой вуз рассматривает заявки по мере их поступления в реальном времени.",
+                details: "Чем раньше абитуриент отправляет документы, тем выше его шансы на зачисление и получение грантов, так как свободные места в вузе заполняются непрерывно."
+            },
+            {
+                term: "Holistic Admissions — Холистический подход",
+                category: "admissions",
+                short: "Философия отбора абитуриентов, при которой оценивается абсолютно вся личность кандидата, а не только оценки.",
+                details: "Вузы Лиги Плюща не имеют минимального порога оценок, который гарантирует поступление. Они детально изучают эссе, рекомендации, характер, увлечения, происхождение, жизненные трудности и лидерские качества, выстраивая полноценный портрет личного вклада студента в кампус."
+            },
+            {
+                term: "Waitlist — Список ожидания",
+                category: "admissions",
+                short: "Промежуточный вердикт приемной комиссии в конце регулярного раунда.",
+                details: "Кандидат не зачислен и не отклонен. Если зачисленные ранее студенты отказываются от своих мест в пользу других вузов, университет начинает предлагать освободившиеся места кандидатам из списка ожидания (в течение мая-июля)."
+            },
+            {
+                term: "Demonstrated Interest — Проявленный интерес",
+                category: "admissions",
+                short: "Метрика активности абитуриента, показывающая вузу его страстное желание поступить.",
+                details: "Отслеживается через посещение вебинаров, клики по ссылкам из писем, официальные экскурсии по кампусу. Вузы Лиги Плюща официально НЕ учитывают проявленный интерес, однако топ-30 вузы (например, Northwestern, WashU) придают этому огромное значение."
+            },
+            {
+                term: "Common Application (Common App)",
+                category: "admissions",
+                short: "Единая платформа для подачи документов, объединяющая более 1000 университетов США.",
+                details: "Позволяет заполнить один общий профиль, загрузить одно главное эссе (Personal Statement) и разослать их во все выбранные вузы, включая всю Лигу Плюща. При этом каждый вуз может потребовать свои специфические эссе (Supplements)."
+            },
+            {
+                term: "Legacy Admissions — Преемственность поколений",
+                category: "admissions",
+                short: "Преференции при поступлении для детей и родственников выпускников этого же вуза.",
+                details: "Традиционная практика элитных частных университетов США, которая в последние годы подвергается жесткой общественной критике. Некоторые топ-вузы уже официально отказались от Legacy, но часть Лиги Плюща все еще сохраняет эту политику."
+            },
+
+            // ================= ЭКЗАМЕНЫ & ТЕСТЫ (EXAMS) =================
+            {
+                term: "Digital SAT — Цифровой SAT",
+                category: "exams",
+                short: "Новый адаптивный компьютерный формат главного стандартизированного теста США.",
+                details: "Длится 2 часа 14 минут. Состоит из модулей чтения/письма и математики. Тест является адаптивным: сложность вопросов во втором модуле напрямую зависит от того, насколько правильно вы решили первый модуль. Максимальный результат — 1600 баллов."
+            },
+            {
+                term: "ACT (American College Testing)",
+                category: "exams",
+                short: "Альтернативный стандартизированный тест, полностью равноценный SAT.",
+                details: "Состоит из 4 разделов: English, Math, Reading и Science. Главное отличие от SAT — наличие научной секции (анализ таблиц и графиков) и более жесткий тайминг на выполнение заданий. Оценивается от 1 до 36 баллов."
+            },
+            {
+                term: "Advanced Placement (AP)",
+                category: "exams",
+                short: "Программа углубленного изучения предметов на уровне университета в американских школах.",
+                details: "Экзамены оцениваются по шкале от 1 до 5. Результаты 4 и 5 баллов высоко ценятся приемной комиссией Лиги Плюща, так как они демонстрируют готовность абитуриента преодолевать тяжелую академическую нагрузку (Academic Rigor)."
+            },
+            {
+                term: "IB (International Baccalaureate)",
+                category: "exams",
+                short: "Международная двухлетняя предуниверситетская программа с жесткими стандартами обучения.",
+                details: "Максимальный балл за диплом составляет 45. Для конкурентной борьбы за место в Лиге Плюща абитуриентам желательно обладать прогнозируемым (Predicted) баллом от 40-42+. Программа IB признается элитными вузами по всему миру."
+            },
+            {
+                term: "Duolingo English Test (DET)",
+                category: "exams",
+                short: "Быстрый, экономичный адаптивный онлайн-тест по английскому языку.",
+                details: "Набирает колоссальную популярность благодаря возможности сдать его из дома за 1 час. Максимальный балл — 160. Для Лиги Плюща необходим балл 130-140+."
+            },
+            {
+                term: "IELTS (International English Language Testing System)",
+                category: "exams",
+                short: "Классический международный экзамен по английскому языку.",
+                details: "Повсеместно принимается в США, Великобритании, Канаде и Европе. Оценивается от 1.0 до 9.0. Для поступления в Лигу Плюща требуется общий балл не менее 7.0 - 7.5."
+            },
+            {
+                term: "TOEFL (Test of English as a Foreign Language)",
+                category: "exams",
+                short: "Американский экзамен по английскому языку, предпочтительный для вузов США.",
+                details: "Максимальный балл — 120. Конкурентоспособные абитуриенты в Лигу Плюща обычно предоставляют результаты выше 100-105 баллов с высокими результатами по секциям Writing и Speaking."
+            },
+
+            // ================= МЕТРИКИ И УСПЕВАЕМОСТЬ (METRICS) =================
+            {
+                term: "GPA (Grade Point Average) — Средний балл",
+                category: "metrics",
+                short: "Среднее арифметическое всех итоговых школьных оценок.",
+                details: "Переводится по разным шкалам (4.0, 5.0, 100-балльной). Оценки абитуриента рассматриваются в контексте его школы: вуз изучает, насколько сложную программу выбрал ученик по сравнению со своими сверстниками."
+            },
+            {
+                term: "Weighted vs. Unweighted GPA",
+                category: "metrics",
+                short: "Разница между взвешенным и невзвешенным средним баллом.",
+                details: "Unweighted GPA рассчитывается стандартно (максимум 4.0), независимо от сложности предметов. Weighted GPA учитывает сложность классов: за предметы уровня AP или IB начисляются дополнительные баллы (что позволяет получить GPA выше 4.0, например 4.5)."
+            },
+            {
+                term: "Class Rank — Рейтинг в классе",
+                category: "metrics",
+                short: "Позиция успеваемости ученика относительно всех его одноклассников.",
+                details: "Например, 'Топ-1% класса' или 'Топ-5% класса'. Около 90%+ зачисленных в Лигу Плюща студентов входят в топ-10% лучших выпускников своих школ."
+            },
+            {
+                term: "Spike Profile — Профиль-шип",
+                category: "metrics",
+                short: "Стратегия построения личного профиля вокруг одной узкой, выдающейся страсти.",
+                details: "В отличие от концепции 'Well-Rounded' (всесторонне развитого ученика, который умеет понемногу все), Лиге Плюща часто требуются выдающиеся специалисты в конкретной нише: например, не просто отличник, а чемпион мира по робототехнике или создатель масштабного эко-стартапа."
+            },
+            {
+                term: "Extracurricular Tiers — Уровни внеучебной деятельности",
+                category: "metrics",
+                short: "Классификация личных достижений по степени влияния на приемную комиссию.",
+                details: "Разделяется условно на 4 уровня. Tier 1 — международные победы, крупные публикации, миллионные бизнесы (высший приоритет). Tier 4 — простое участие в школьных кружках без лидерских ролей."
+            },
+            {
+                term: "Extracurriculars (Внеучебная деятельность)",
+                category: "metrics",
+                short: "Любая социально полезная или профессиональная активность вне обязательных школьных уроков.",
+                details: "Сюда относятся: волонтерские проекты, спорт, искусство, основание клубов, ведение блогов, участие в IT-проектах и дебатах. Особое значение имеет в вузах США и Великобритании при холистическом рассмотрении заявки."
+            },
+
+            // ================= ГРАНТЫ & ФИНАНСИРОВАНИЕ (FUNDING) =================
+            {
+                term: "Need-Blind Admissions — Финансово 'слепой' прием",
+                category: "funding",
+                short: "Политика отбора, при которой вуз не знает, нужна ли кандидату финансовая помощь.",
+                details: "Университет принимает решение о зачислении, основываясь только на академических успехах. В случае поступления вуз обязуется полностью покрыть доказанную потребность вашей семьи. Для иностранных студентов Need-Blind политикой обладают всего несколько вузов: Harvard, Yale, Princeton, MIT, Dartmouth, Bowdoin, Amherst."
+            },
+            {
+                term: "Need-Aware Admissions — Финансово 'чувствительный' прием",
+                category: "funding",
+                short: "Политика приема, при которой запрос на финансовую помощь снижает шансы на поступление.",
+                details: "Если ваша семья не может оплатить обучение самостоятельно и вы запрашиваете грант, вы будете соревноваться с другими кандидатами в более жестком конкурсе за ограниченный бюджет вуза."
+            },
+            {
+                term: "CSS Profile (College Scholarship Service Profile)",
+                category: "funding",
+                short: "Подробная онлайн-форма College Board для оценки права на финансовую помощь.",
+                details: "Заполняется родителями абитуриента и отправляется в частные университеты США для детального подтверждения доходов и расходов семьи. Требует прикрепления налоговых деклараций и банковских выписок."
+            },
+            {
+                term: "FAFSA (Free Application for Federal Student Aid)",
+                category: "funding",
+                short: "Официальная федеральная форма США для подачи на государственные субсидии и займы.",
+                details: "Заполняется исключительно гражданами США или обладателями грин-карт (Permanent Residents). Иностранные студенты FAFSA не заполняют."
+            },
+            {
+                term: "Merit-Based Financial Aid — Гранты за заслуги",
+                category: "funding",
+                short: "Финансовые стипендии за высокие академические, творческие или спортивные успехи.",
+                details: "Обратите внимание: вузы Лиги Плюща официально НЕ выдают Merit-Based стипендии — абсолютно вся финансовая помощь в Лиге Плюща рассчитывается только по финансовой потребности семьи (Need-Based Aid)."
+            },
+
+            // ================= ДОКУМЕНТЫ & ЭССЕ (DOCS) =================
+            {
+                term: "Common App Personal Statement — Главное эссе",
+                category: "docs",
+                short: "Основное эссе объемом до 650 слов, отправляемое во все вузы.",
+                details: "Это история о вашей личности, ценностях, преодолении трудностей или увлечениях. Оно призвано очеловечить сухие цифры оценок и баллов тестов перед приемной комиссией."
+            },
+            {
+                term: "Supplemental Essays (Дополнительные эссе вузов)",
+                category: "docs",
+                short: "Специфические письменные вопросы от каждого конкретного вуза.",
+                details: "Могут варьироваться от лаконичных вопросов ('Почему этот вуз?') до глубоких философских размышлений. Сильнейшие 'сапплементы' (Supplements) часто играют решающую роль при отборе в Лигу Плюща."
+            },
+            {
+                term: "School Profile — Профиль школы",
+                category: "docs",
+                short: "Официальный документ от вашей школы, прикрепляемый школьным советником (Counselor).",
+                details: "Описывает систему оценивания в вашей школе, сложность доступных курсов и средние показатели выпускников. Помогает приемной комиссии оценить ваши успехи относительно возможностей вашей школы."
+            },
+            {
+                term: "Letter of Recommendation (LoR)",
+                category: "docs",
+                short: "Рекомендательное письмо от учителей-предметников и школьного куратора.",
+                details: "Для Лиги Плюща обычно требуются 2 рекомендации от учителей академических предметов (желательно 11 класса) и 1 от школьного советника/директора."
+            },
+            {
+                term: "Creative Portfolio — Портфолио достижений",
+                category: "docs",
+                short: "Дополнительные материалы (картины, музыка, ссылки на код, архитектурные проекты).",
+                details: "Отправляется через специальные платформы (например, SlideRoom) только в том случае, если ваши таланты находятся на профессиональном уровне и могут усилить вашу академическую заявку."
+            },
+            {
+                term: "Motivation Letter / Statement of Purpose (SOP)",
+                category: "docs",
+                short: "Эссе, в котором абитуриент описывает свои цели, бэкграунд и причины выбора конкретной программы.",
+                details: "Один из ключевых документов заявки. Качественное эссе способно компенсировать даже не самый высокий средний балл (GPA), раскрывая личную историю, амбиции и уникальность студента."
+            }
+        ];
+
+        // Данные таймлайна по классам
+        const timelineData = {
+            "9": {
+                title: "🌱 9 КЛАСС — Исследование интересов и старт языка",
+                focus: "Ваша цель в 9 классе — определиться со своими увлечениями, начать углубленно учить английский язык и не портить оценки.",
+                items: [
+                    "<b>Английский язык:</b> Начните регулярную подготовку. Доведите уровень с нуля до уверенного B2. Это фундамент всего проекта.",
+                    "<b>Успеваемость:</b> Следите за оценками (вашим средним баллом <a href='javascript:void(0)' onclick='jumpToGlossaryTerm(\"GPA\")' class='text-brand-600 hover:text-brand-700 font-bold transition-colors cursor-pointer'>GPA</a>). Европейские вузы изучают выписки за последние 3 года учебы, поэтому 9 класс тоже идет в зачет.",
+                    "<b>Пробуйте разное:</b> Запишитесь в кружки, развивайте свою <a href='javascript:void(0)' onclick='jumpToGlossaryTerm(\"Extracurriculars\")' class='text-brand-600 hover:text-brand-700 font-bold transition-colors cursor-pointer'>внеучебную деятельность</a>, начните дебаты, пишите статьи или займитесь волонтерством. Нащупайте сферу, которая вам искренне интересна.",
+                    "<b>Олимпиады:</b> Пробуйте участвовать в школьных и городских этапах. Победы станут мощной строчкой в вашем будущем портфолио."
+                ]
+            },
+            "10": {
+                title: "🚀 10 КЛАСС — Время активных тестов и проектов",
+                focus: "В 10 классе начинается самая тяжелая работа: вы должны запустить уникальные проекты и сдать языковые экзамены.",
+                items: [
+                    "<b>Экзамены по языку:</b> Рекомендуется сдать языковой тест (<a href='javascript:void(0)' onclick='jumpToGlossaryTerm(\"IELTS\")' class='text-brand-600 hover:text-brand-700 font-bold transition-colors cursor-pointer'>IELTS</a>, <a href='javascript:void(0)' onclick='jumpToGlossaryTerm(\"TOEFL\")' class='text-brand-600 hover:text-brand-700 font-bold transition-colors cursor-pointer'>TOEFL</a> или <a href='javascript:void(0)' onclick='jumpToGlossaryTerm(\"Duolingo\")' class='text-brand-600 hover:text-brand-700 font-bold transition-colors cursor-pointer'>Duolingo</a>) в конце 10 класса. Сертификаты действуют 2 года — этого как раз хватит на период подачи.",
+                    "<b>Внеучебная деятельность:</b> Не будьте просто участником. Возглавьте проект! Попробуйте сформировать уникальный <a href='javascript:void(0)' onclick='jumpToGlossaryTerm(\"Spike\")' class='text-brand-600 hover:text-brand-700 font-bold transition-colors cursor-pointer'>профиль-шип (Spike)</a>, в котором вы будете превосходить остальных.",
+                    "<b>Академические тесты:</b> Если вы целитесь в США или топовые вузы мира, начните готовиться к <a href='javascript:void(0)' onclick='jumpToGlossaryTerm(\"SAT\")' class='text-brand-600 hover:text-brand-700 font-bold transition-colors cursor-pointer'>SAT</a> или <a href='javascript:void(0)' onclick='jumpToGlossaryTerm(\"ACT\")' class='text-brand-600 hover:text-brand-700 font-bold transition-colors cursor-pointer'>ACT</a>. Сдайте пробный тест в середине года.",
+                    "<b>Список вузов:</b> Составьте черновой список из 15-20 вузов. Разделите их на три категории: Safety (безопасные), Match (соответствующие) и Reach (вузы мечты)."
+                ]
+            },
+            "11": {
+                title: "🎯 11 КЛАСС (Выпускной) — Написание эссе и подача документов",
+                focus: "Это решающий год. Главная нагрузка ложится на написание глубоких мотивационных эссе и отправку заявок.",
+                items: [
+                    "<b>Сентябрь - Октябрь (Ранний раунд):</b> Напишите ваше главное эссе (<a href='javascript:void(0)' onclick='jumpToGlossaryTerm(\"Personal Statement\")' class='text-brand-600 hover:text-brand-700 font-bold transition-colors cursor-pointer'>Personal Statement</a>) на платформе <a href='javascript:void(0)' onclick='jumpToGlossaryTerm(\"Common App\")' class='text-brand-600 hover:text-brand-700 font-bold transition-colors cursor-pointer'>Common App</a>. Попросите учителей составить рекомендательные письма. Подайте документы на раунды <a href='javascript:void(0)' onclick='jumpToGlossaryTerm(\"Early Decision\")' class='text-brand-600 hover:text-brand-700 font-bold transition-colors cursor-pointer'>Early Decision</a> или <a href='javascript:void(0)' onclick='jumpToGlossaryTerm(\"Early Action\")' class='text-brand-600 hover:text-brand-700 font-bold transition-colors cursor-pointer'>Early Action</a> до 1 ноября.",
+                    "<b>Ноябрь - Декабрь (Регулярный раунд):</b> Пишите дополнительные эссе (<a href='javascript:void(0)' onclick='jumpToGlossaryTerm(\"Supplemental\")' class='text-brand-600 hover:text-brand-700 font-bold transition-colors cursor-pointer'>Supplements</a>) и отправьте заявки до января (<a href='javascript:void(0)' onclick='jumpToGlossaryTerm(\"Regular Decision\")' class='text-brand-600 hover:text-brand-700 font-bold transition-colors cursor-pointer'>Regular Decision</a>).",
+                    "<b>Январь - Март (Финансовые документы):</b> Если вам нужна финансовая помощь в США, заполните финансовые анкеты <a href='javascript:void(0)' onclick='jumpToGlossaryTerm(\"CSS Profile\")' class='text-brand-600 hover:text-brand-700 font-bold transition-colors cursor-pointer'>CSS Profile</a> для элитных вузов вроде <a href='javascript:void(0)' onclick='jumpToGlossaryTerm(\"Harvard\")' class='text-brand-600 hover:text-brand-700 font-bold transition-colors cursor-pointer'>Harvard</a> или <a href='javascript:void(0)' onclick='jumpToGlossaryTerm(\"Yale\")' class='text-brand-600 hover:text-brand-700 font-bold transition-colors cursor-pointer'>Yale</a>.",
+                    "<b>Апрель - Май (Решения и визы):</b> Принимайте офферы, подтверждайте зачисление (дедлайны до 1 мая) и запускайте процесс оформления студенческой визы."
+                ]
+            },
+            "grad": {
+                title: "🎓 ВЫПУСКНИК (Gap Year) — Перезагрузка и улучшение профиля",
+                focus: "Если вы уже окончили школу/вуз и хотите поступать заново, Gap Year — это отличная возможность устранить слабые места в портфолио.",
+                items: [
+                    "<b>Анализ прошлых ошибок:</b> Если вы подавались ранее и получили отказы (<a href='javascript:void(0)' onclick='jumpToGlossaryTerm(\"Waitlist\")' class='text-brand-600 hover:text-brand-700 font-bold transition-colors cursor-pointer'>или попали в Waitlist</a>), перепишите ваши эссе. Скорее всего, они были недостаточно личными или раскрывали вас поверхностно.",
+                    "<b>Стажировки и Работа:</b> Устройтесь на оплачиваемую или волонтерскую стажировку по вашей специальности. Практический опыт ценится вузами в разы сильнее школьных активностей.",
+                    "<b>Пересдача экзаменов:</b> Если ваши баллы тестов (<a href='javascript:void(0)' onclick='jumpToGlossaryTerm(\"SAT\")' class='text-brand-600 hover:text-brand-700 font-bold transition-colors cursor-pointer'>SAT</a>, <a href='javascript:void(0)' onclick='jumpToGlossaryTerm(\"IELTS\")' class='text-brand-600 hover:text-brand-700 font-bold transition-colors cursor-pointer'>IELTS</a>) были ниже среднего уровня выбранных университетов, используйте лето и начало осени для пересдачи.",
+                    "<b>Подача заявок:</b> Подавайте документы в те же сроки, что и 11 класс (до ноября на ранний раунд, до января на регулярный)."
+                ]
+            }
+        };
+
+        let selectedCategory = 'all';
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Инициализация дефолтного таймлайна (11 класс)
+            selectGradeTimeline('11');
+            renderGlossary();
+        });
+
+        // Функция переключения глобальных вкладок
+        function switchGlobalTab(tabId) {
+            const sectionGuide = document.getElementById('section-guide');
+            const sectionGlossary = document.getElementById('section-glossary');
+            const btnGuide = document.getElementById('tab-btn-guide');
+            const btnGlossary = document.getElementById('tab-btn-glossary');
+
+            if (tabId === 'guide') {
+                sectionGuide.classList.remove('hidden');
+                sectionGlossary.classList.add('hidden');
+                btnGuide.className = "flex-1 py-3 px-4 rounded-xl text-xs sm:text-sm font-bold transition-all flex items-center justify-center gap-2 bg-white text-brand-700 shadow-sm";
+                btnGlossary.className = "flex-1 py-3 px-4 rounded-xl text-xs sm:text-sm font-bold transition-all flex items-center justify-center gap-2 text-slate-600 hover:text-slate-900";
+            } else {
+                sectionGuide.classList.add('hidden');
+                sectionGlossary.classList.remove('hidden');
+                btnGuide.className = "flex-1 py-3 px-4 rounded-xl text-xs sm:text-sm font-bold transition-all flex items-center justify-center gap-2 text-slate-600 hover:text-slate-900";
+                btnGlossary.className = "flex-1 py-3 px-4 rounded-xl text-xs sm:text-sm font-bold transition-all flex items-center justify-center gap-2 bg-white text-brand-700 shadow-sm";
+            }
+        }
+
+        // Интерактивный переход к термину глоссария БЕЗ фильтрации по поиску
+        function jumpToGlossaryTerm(termName) {
+            // 1. Переключаем на вкладку глоссария
+            switchGlobalTab('glossary');
+
+            // 2. Сбрасываем категорию на 'all', чтобы термин точно отображался в общем списке
+            selectCategory('all');
+
+            // 3. Очищаем поле поиска, чтобы показать пользователю абсолютно все термины
+            const searchInput = document.getElementById('glossary-search');
+            if (searchInput) {
+                searchInput.value = '';
+            }
+
+            // 4. Запускаем полный рендер глоссария
+            renderGlossary();
+
+            // 5. Находим индекс термина в массиве glossaryData
+            const targetIndex = glossaryData.findIndex(item =>
+                item.term.toLowerCase().includes(termName.toLowerCase())
+            );
+
+            // 6. Если термин найден, плавно скроллим к нему, открываем его и подсвечиваем рамкой
+            if (targetIndex !== -1) {
+                setTimeout(() => {
+                    // Разворачиваем вкладку подробностей
+                    const detailsDiv = document.getElementById(`details-${targetIndex}`);
+                    const icon = document.getElementById(`icon-chevron-${targetIndex}`);
+                    if (detailsDiv && detailsDiv.classList.contains('hidden')) {
+                        detailsDiv.classList.remove('hidden');
+                        if (icon) icon.classList.add('rotate-180');
+                    }
+
+                    // Находим элемент карточки и скроллим к нему
+                    const cardElement = document.getElementById(`term-card-${targetIndex}`);
+                    if (cardElement) {
+                        cardElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+                        // Добавляем красивый кратковременный фиолетовый акцент
+                        cardElement.classList.add('border-brand-500', 'ring-4', 'ring-brand-500/10');
+                        setTimeout(() => {
+                            cardElement.classList.remove('ring-4', 'ring-brand-500/10');
+                        }, 2000);
+                    }
+                }, 200);
+            }
+        }
+
+        // Логика переключения интерактивного таймлайна по классам
+        function selectGradeTimeline(gradeKey) {
+            // Сброс стилей кнопок таймлайна
+            document.querySelectorAll('.grade-timeline-btn').forEach(btn => {
+                btn.className = "grade-timeline-btn py-3 px-4 rounded-xl font-bold text-xs sm:text-sm transition-all border border-white/20 bg-white/10 text-white hover:bg-white/15";
+            });
+
+            // Назначение активной кнопки
+            const activeBtn = document.getElementById(`btn-grade-${gradeKey}`);
+            if (activeBtn) {
+                activeBtn.className = "grade-timeline-btn py-3 px-4 rounded-xl font-bold text-xs sm:text-sm transition-all border border-brand-500 bg-brand-600 text-white shadow-md";
+            }
+
+            // Отрисовка контента таймлайна
+            const contentDiv = document.getElementById('timeline-text-content');
+            const data = timelineData[gradeKey];
+            if (!data) return;
+
+            let itemsHtml = data.items.map(item => `
+                <li class="flex items-start gap-3 text-slate-200 text-xs sm:text-sm">
+                    <span class="text-brand-400 mt-1 shrink-0">✦</span>
+                    <div>${item}</div>
+                </li>
+            `).join('');
+
+            contentDiv.innerHTML = `
+                <h3 class="font-display font-bold text-base sm:text-lg text-white border-b border-white/10 pb-2">${data.title}</h3>
+                <p class="text-indigo-200 text-xs sm:text-sm leading-relaxed">${data.focus}</p>
+                <ul class="space-y-3.5 pt-2">
+                    ${itemsHtml}
+                </ul>
+            `;
+        }
+
+        // Логика рендеринга и поиска по глоссарию
+        function renderGlossary() {
+            const container = document.getElementById('glossary-container');
+            const searchVal = document.getElementById('glossary-search').value.toLowerCase().trim();
+            container.innerHTML = '';
+
+            let filtered = glossaryData.filter(item => {
+                const matchesCategory = (selectedCategory === 'all' || item.category === selectedCategory);
+                const matchesSearch = item.term.toLowerCase().includes(searchVal) ||
+                                      item.short.toLowerCase().includes(searchVal) ||
+                                      item.details.toLowerCase().includes(searchVal);
+                return matchesCategory && matchesSearch;
+            });
+
+            if (filtered.length === 0) {
+                document.getElementById('no-results').classList.remove('hidden');
+                return;
+            } else {
+                document.getElementById('no-results').classList.add('hidden');
+            }
+
+            filtered.forEach((item, index) => {
+                const card = document.createElement('div');
+                card.id = `term-card-${index}`; // Присваиваем ID для скролла
+                card.className = "border border-slate-150 rounded-2xl bg-slate-50/30 p-5 transition-all hover:bg-white hover:border-brand-500/30";
+                card.innerHTML = `
+                    <div class="flex items-start justify-between cursor-pointer" onclick="toggleDetails(${index})">
+                        <div class="space-y-1 pr-4">
+                            <span class="inline-block text-[10px] font-bold tracking-wider uppercase text-brand-600 bg-brand-50 px-2 py-0.5 rounded-md mb-1">${getCategoryName(item.category)}</span>
+                            <h3 class="font-display font-bold text-base sm:text-lg text-slate-950">${item.term}</h3>
+                            <p class="text-slate-600 text-xs sm:text-sm leading-relaxed">${item.short}</p>
+                        </div>
+                        <button class="text-slate-400 p-1 rounded-lg bg-white border border-slate-100 shadow-sm shrink-0 mt-1">
+                            <i id="icon-chevron-${index}" data-lucide="chevron-down" class="w-4 h-4 transform transition-transform duration-200"></i>
+                        </button>
+                    </div>
+                    <div id="details-${index}" class="hidden mt-4 pt-4 border-t border-slate-100 text-xs sm:text-sm text-slate-500 leading-relaxed space-y-2 animate-fade-in-up">
+                        <p class="bg-brand-50/30 border-l-4 border-brand-500 p-3 rounded-r-xl text-slate-700">
+                            ${item.details}
+                        </p>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+        }
+
+        function getCategoryName(cat) {
+            const names = {
+                ivy: "Лига Плюща & Топ-Вузы",
+                admissions: "Процесс подачи",
+                exams: "Экзамены & Тесты",
+                metrics: "Академические метрики",
+                funding: "Стипендии и гранты",
+                docs: "Документы & Эссе"
+            };
+            return names[cat] || "Общее";
+        }
+
+        function toggleDetails(index) {
+            const detailsDiv = document.getElementById(`details-${index}`);
+            const icon = document.getElementById(`icon-chevron-${index}`);
+
+            if (detailsDiv && detailsDiv.classList.contains('hidden')) {
+                detailsDiv.classList.remove('hidden');
+                if (icon) icon.classList.add('rotate-180');
+            } else if (detailsDiv) {
+                detailsDiv.classList.add('hidden');
+                if (icon) icon.classList.remove('rotate-180');
+            }
+        }
+
+        function filterGlossary() {
+            renderGlossary();
+        }
+
+        function selectCategory(cat) {
+            selectedCategory = cat;
+
+            // Сброс стилей кнопок фильтров
+            document.querySelectorAll('.cat-btn').forEach(btn => {
+                btn.className = "cat-btn bg-white text-slate-600 border border-slate-200 hover:border-slate-300 rounded-full px-4 py-1.5 text-xs font-semibold transition-all";
+            });
+
+            // Назначение активного класса
+            const activeBtn = document.getElementById(`cat-${cat}`);
+            if (activeBtn) {
+                activeBtn.className = "cat-btn bg-brand-600 text-white border border-brand-600 rounded-full px-4 py-1.5 text-xs font-semibold transition-all";
+            }
+
+            renderGlossary();
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+    </script>
+</body>
+</html>
